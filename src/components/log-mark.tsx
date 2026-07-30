@@ -25,13 +25,13 @@ export function LogMark({
       {...props}
     >
       <defs>
-        {/* The bar channel + G mouth are carved out via this mask. */}
+        {/* The bar channel + G's squared top-right terminal are carved via this mask. */}
         <mask id="log-channel">
           <rect x="0" y="0" width="292" height="100" fill="white" />
           {/* horizontal bar channel across all three letters */}
           <rect x="-4" y="44.5" width="300" height="11" fill="black" />
-          {/* G mouth — opening on the right */}
-          <rect x="266" y="20" width="30" height="24.5" fill="black" />
+          {/* G — open the top-right into a squared terminal */}
+          <rect x="253" y="-6" width="45" height="44" fill="black" />
         </mask>
       </defs>
 
@@ -49,7 +49,8 @@ export function LogMark({
           strokeWidth="28"
         />
 
-        {/* G — plate ring with a mouth and an inner bar (tongue) */}
+        {/* G — the plate ring plus a horizontal arm filling the right of the
+            counter; the channel splits it and the top-right is squared off. */}
         <circle
           cx="242"
           cy="50"
@@ -58,8 +59,7 @@ export function LogMark({
           stroke="currentColor"
           strokeWidth="28"
         />
-        {/* G tongue — short horizontal bar into the counter, below the channel */}
-        <rect x="242" y="55.5" width="42" height="14" />
+        <rect x="229" y="38" width="61" height="25" />
       </g>
     </svg>
   );

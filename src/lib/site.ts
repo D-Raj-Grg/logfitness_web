@@ -21,11 +21,11 @@ export const siteConfig = {
 
   // Social
   instagram: {
-    handle: "@logfitnesshtf",
-    href: "https://instagram.com/logfitnesshtf",
+    handle: "@logfitnesshtd",
+    href: "https://instagram.com/logfitnesshtd",
   },
   tiktok: {
-    handle: "@logfitnesshtf",
-    href: "https://www.tiktok.com/@logfitnesshtf",
+    handle: "@logfitnesshtd",
+    href: "https://www.tiktok.com/@logfitnesshtd",
   },
 } as const;
