@@ -24,6 +24,16 @@ export function Hero() {
         )}
       />
 
+      {/* Spotlight glow — a monochrome ground light, not a brand colour */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-1/3 -z-0 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/[0.06] blur-[120px]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_120%_at_50%_0%,transparent_55%,var(--tar-road)_100%)]"
+      />
+
       <div className="relative z-10 mx-auto w-full max-w-6xl px-5 py-24 sm:px-8">
         <div className="flex flex-col items-center text-center">
           <BlurFade delay={0.1} inView>

@@ -6,6 +6,7 @@ import { Concept } from "@/components/sections/concept";
 import { Identity } from "@/components/sections/identity";
 import { Merch } from "@/components/sections/merch";
 import { BrandBook } from "@/components/sections/brand-book";
+import { Contact } from "@/components/sections/contact";
 import { CTA } from "@/components/sections/cta";
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
         <Merch />
         <BrandBook />
         <CTA />
+        <Contact />
       </main>
       <SiteFooter />
     </>

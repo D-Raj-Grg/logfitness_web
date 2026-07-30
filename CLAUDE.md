@@ -44,13 +44,17 @@ src/app/
   icon.svg                    # favicon — the LOG monogram
 src/components/
   log-mark.tsx                # the LOG monogram, drawn as SVG geometry
+  icons.tsx                   # Instagram / TikTok glyphs (lucide dropped brand icons)
   section-heading.tsx         # shared eyebrow + title + description
   site-header.tsx / site-footer.tsx
-  sections/                   # hero, stats, concept, identity, merch, brand-book, cta
+  sections/                   # hero, stats, concept, identity, merch, brand-book,
+                              #   cta, contact
   ui/                         # shadcn primitives (button, card, badge)
   magicui/                    # marquee, blur-fade, animated-grid-pattern, dot-pattern,
                               #   number-ticker, shimmer-button, animated-shiny-text
-lib/utils.ts                  # cn() helper
+src/lib/
+  utils.ts                    # cn() helper
+  site.ts                     # single source of truth for contact + social details
 components.json               # shadcn config
 ```
 
@@ -89,3 +93,8 @@ Brand tokens live in `:root` in `globals.css` and are exposed to Tailwind via
   (that is how the current ones were added), installing any needed deps from
   npm.
 - Run `npm run lint` and `npm run build` before committing; keep lint clean.
+- **Contact details** (phone, address, Instagram/TikTok) live in `src/lib/site.ts`
+  — update them there, not inline. Current: Kapur Complex, Hetauda ·
+  `@logfitnesshtf` · +977 98252 54929.
+- `lucide-react` no longer ships brand icons (Instagram, TikTok, etc.). Draw new
+  social glyphs in `src/components/icons.tsx` rather than importing from lucide.

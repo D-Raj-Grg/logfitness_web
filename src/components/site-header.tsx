@@ -8,6 +8,7 @@ const nav = [
   { label: "Identity", href: "#identity" },
   { label: "Merch", href: "#merch" },
   { label: "Brand Book", href: "#brand-book" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export function SiteHeader() {
@@ -34,7 +35,7 @@ export function SiteHeader() {
         </nav>
 
         <Button asChild size="sm" className="tracking-label text-xs">
-          <Link href="#brand-book">View the deck</Link>
+          <Link href="#contact">Join LOG</Link>
         </Button>
       </div>
     </header>

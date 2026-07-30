@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     template: "%s · LOG Fitness",
   },
   description:
-    "Lord of Gyms & Fitness (LOG) — Nepal's premier athletic lifestyle brand. A premium fitness destination and athletic streetwear identity from Kathmandu. Train hard. Wear it louder.",
+    "Lord of Gyms & Fitness (LOG) — Nepal's premier athletic lifestyle brand. A premium fitness destination and athletic streetwear identity at Kapur Complex, Hetauda. Train hard. Wear it louder.",
   keywords: [
     "LOG",
     "Lord of Gyms",
