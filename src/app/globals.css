@@ -166,6 +166,13 @@
     html {
       scroll-behavior: auto;
     }
+    .animate-marquee,
+    .animate-marquee-vertical,
+    .animate-shimmer-slide,
+    .animate-spin-around,
+    .animate-shine {
+      animation: none;
+    }
   }
 }
 

@@ -59,6 +59,16 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  icons: {
+    // Declared explicitly — setting `icons` at all replaces the file-convention
+    // tags, so every variant must be listed here.
+    icon: [
+      { url: "/favicon.ico", sizes: "16x16 32x32" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-icon",
+  },
   robots: {
     index: true,
     follow: true,
@@ -99,6 +109,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-foreground focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-background"
+        >
+          Skip to content
+        </a>
         {children}
         <Grain />
       </body>

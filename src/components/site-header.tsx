@@ -41,7 +41,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
           {nav.map((item) => (
             <Link
               key={item.href}
@@ -87,7 +87,10 @@ export function SiteHeader() {
           "transition-[max-height] duration-300 ease-in-out"
         )}
       >
-        <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-5 py-4 sm:px-8">
+        <nav
+          aria-label="Mobile"
+          className="mx-auto flex max-w-6xl flex-col gap-1 px-5 py-4 sm:px-8"
+        >
           {nav.map((item) => (
             <Link
               key={item.href}

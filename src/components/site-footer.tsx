@@ -101,7 +101,7 @@ export function SiteFooter() {
               </ul>
             </div>
 
-            <div className="space-y-3">
+            <address className="space-y-3 not-italic">
               <p className="text-xs tracking-label text-foreground">Contact</p>
               <ul className="space-y-3">
                 <li>
@@ -125,7 +125,7 @@ export function SiteFooter() {
                   </a>
                 </li>
               </ul>
-            </div>
+            </address>
           </div>
         </div>
 

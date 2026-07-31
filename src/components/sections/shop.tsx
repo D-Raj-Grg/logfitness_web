@@ -65,7 +65,16 @@ export function Shop() {
         </div>
       </div>
 
-      <div className="relative mt-12 pb-24">
+      {/* The marquee repeats its content — give screen readers a single clean list. */}
+      <ul className="sr-only">
+        {products.map((item) => (
+          <li key={item.name}>
+            {item.name} — {item.detail}
+          </li>
+        ))}
+      </ul>
+
+      <div aria-hidden="true" className="relative mt-12 pb-24">
         <Marquee pauseOnHover className="[--duration:36s] [--gap:1.25rem]">
           {products.map((item, i) => (
             <ProductCard key={item.name} item={item} accent={i % 2 === 1} />
