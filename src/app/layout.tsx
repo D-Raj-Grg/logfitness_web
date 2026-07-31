@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Anton, JetBrains_Mono } from "next/font/google";
+
+import { Grain } from "@/components/textures";
+
 import "./globals.css";
 
 const inter = Inter({
@@ -73,6 +76,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
         {children}
+        <Grain />
       </body>
     </html>
   );

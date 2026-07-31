@@ -5,6 +5,7 @@ import { SectionHeading } from "@/components/section-heading";
 import { BlurFade } from "@/components/magicui/blur-fade";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { DotPattern } from "@/components/magicui/dot-pattern";
+import { PlateBadge } from "@/components/illustrations";
 import { siteConfig } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
@@ -61,31 +62,21 @@ export function Membership() {
             </BlurFade>
           </div>
 
-          {/* Visual panel */}
+          {/* Visual panel — the engraved member plate */}
           <BlurFade delay={0.2} inView>
-            <div className="relative flex aspect-square flex-col justify-between overflow-hidden rounded-2xl border border-border/60 bg-tar-road p-8 sm:p-10">
+            <div className="relative flex aspect-square flex-col overflow-hidden rounded-2xl border border-border/60 bg-tar-road p-8 sm:p-10">
               <DotPattern
                 className={cn(
                   "fill-white/[0.06]",
-                  "[mask-image:radial-gradient(420px_circle_at_60%_30%,white,transparent)]"
+                  "[mask-image:radial-gradient(420px_circle_at_center,white,transparent)]"
                 )}
               />
-              <div className="relative z-10">
-                <p className="text-xs tracking-label text-white/50">
-                  Lord of Gyms &amp; Fitness
-                </p>
+              <div className="relative z-10 flex flex-1 items-center justify-center">
+                <PlateBadge className="w-full max-w-[420px] drop-shadow-[0_24px_48px_rgba(0,0,0,0.5)] transition-transform duration-700 hover:rotate-[4deg]" />
               </div>
-              <div className="relative z-10 space-y-4">
-                <p className="font-display text-4xl leading-[0.95] text-white sm:text-5xl">
-                  Train hard.
-                  <br />
-                  Wear it louder.
-                </p>
-                <p className="max-w-xs text-sm leading-relaxed text-white/60">
-                  Join the movement building Hetauda&apos;s strongest fitness
-                  community — on the floor and in the feed.
-                </p>
-              </div>
+              <p className="relative z-10 pt-6 text-center text-xs tracking-label text-white/40">
+                Every plate in the house carries the mark
+              </p>
             </div>
           </BlurFade>
         </div>

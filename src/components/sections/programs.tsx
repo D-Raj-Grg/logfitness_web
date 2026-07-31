@@ -1,29 +1,38 @@
-import { Dumbbell, HeartPulse, Music, Sparkles } from "lucide-react";
-
 import { SectionHeading } from "@/components/section-heading";
 import { BlurFade } from "@/components/magicui/blur-fade";
-import { Card, CardContent } from "@/components/ui/card";
+import { DotPattern } from "@/components/magicui/dot-pattern";
+import { ProgramEmblem, type EmblemKind } from "@/components/illustrations";
+import { cn } from "@/lib/utils";
 
-const programs = [
+const programs: {
+  kind: EmblemKind;
+  no: string;
+  name: string;
+  body: string;
+}[] = [
   {
-    icon: Dumbbell,
+    kind: "strength",
+    no: "01",
     name: "Strength",
-    body: "Free weights, plate-loaded machines and power racks — a full floor built for real, functional strength, whether you're starting out or chasing a new PR.",
+    body: "Free weights, plate-loaded machines and power racks — a full floor built for real, functional strength, from first session to new PR.",
   },
   {
-    icon: HeartPulse,
+    kind: "cardio",
+    no: "02",
     name: "Cardio",
     body: "Treadmills, bikes and a dedicated conditioning zone to build your engine, burn fat and keep the heart strong.",
   },
   {
-    icon: Music,
+    kind: "zumba",
+    no: "03",
     name: "Zumba",
     body: "High-energy, Latin-inspired dance fitness. The most fun you'll have doing cardio — led by instructors who keep the room moving.",
   },
   {
-    icon: Sparkles,
+    kind: "dance",
+    no: "04",
     name: "Dance",
-    body: "Choreographed dance sessions for every level. Learn, sweat and move — from beginner routines to full choreography.",
+    body: "Choreographed sessions for every level. Learn, sweat and move — from beginner routines to full choreography.",
   },
 ];
 
@@ -39,22 +48,39 @@ export function Programs() {
 
         <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {programs.map((p, i) => (
-            <BlurFade key={p.name} delay={0.12 + i * 0.1} inView>
-              <Card className="group h-full border-border/60 bg-card/50 transition-colors hover:border-border hover:bg-card">
-                <CardContent className="flex h-full flex-col gap-5">
-                  <span className="flex size-12 items-center justify-center rounded-xl border border-border bg-secondary/50 text-foreground transition-colors group-hover:bg-foreground group-hover:text-background">
-                    <p.icon className="size-5" />
+            <BlurFade key={p.kind} delay={0.12 + i * 0.1} inView>
+              <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-border/60 bg-card/50 transition-colors hover:border-border hover:bg-card">
+                {/* Emblem window */}
+                <div className="relative flex items-center justify-center overflow-hidden border-b border-border/60 bg-tar-road py-10">
+                  <DotPattern
+                    width={14}
+                    height={14}
+                    className={cn(
+                      "fill-white/[0.05]",
+                      "[mask-image:radial-gradient(140px_circle_at_center,white,transparent)]"
+                    )}
+                  />
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute right-4 top-3 font-display text-3xl text-white/10"
+                  >
+                    {p.no}
                   </span>
-                  <div className="space-y-2">
-                    <h3 className="font-display text-2xl text-foreground">
-                      {p.name}
-                    </h3>
-                    <p className="text-sm leading-relaxed text-muted-foreground">
-                      {p.body}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+                  <ProgramEmblem
+                    kind={p.kind}
+                    className="relative z-10 size-36 text-white/90 transition-transform duration-500 group-hover:rotate-[8deg] group-hover:scale-105"
+                  />
+                </div>
+
+                <div className="flex flex-1 flex-col gap-2.5 p-6">
+                  <h3 className="font-display text-2xl text-foreground">
+                    {p.name}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    {p.body}
+                  </p>
+                </div>
+              </article>
             </BlurFade>
           ))}
         </div>

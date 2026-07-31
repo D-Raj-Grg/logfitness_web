@@ -3,22 +3,21 @@ import { GlassWater, ShieldCheck, Tag } from "lucide-react";
 import { SectionHeading } from "@/components/section-heading";
 import { BlurFade } from "@/components/magicui/blur-fade";
 import { Marquee } from "@/components/magicui/marquee";
-import { cn } from "@/lib/utils";
+import { SupplementTub } from "@/components/illustrations";
 
 type Product = {
   name: string;
   detail: string;
-  tone: "dark" | "grey";
 };
 
 const products: Product[] = [
-  { name: "Whey Protein", detail: "Lean muscle · recovery", tone: "dark" },
-  { name: "Mass Gainer", detail: "Clean bulking calories", tone: "grey" },
-  { name: "Creatine", detail: "Strength · power output", tone: "dark" },
-  { name: "Pre-Workout", detail: "Energy · focus · pump", tone: "grey" },
-  { name: "BCAA / EAA", detail: "Recovery · endurance", tone: "dark" },
-  { name: "Shakers & Bottles", detail: "Carry the mark", tone: "grey" },
-  { name: "LOG Apparel", detail: "Wear it louder", tone: "dark" },
+  { name: "Whey Protein", detail: "Lean muscle · recovery" },
+  { name: "Mass Gainer", detail: "Clean bulking calories" },
+  { name: "Creatine", detail: "Strength · power output" },
+  { name: "Pre-Workout", detail: "Energy · focus · pump" },
+  { name: "BCAA / EAA", detail: "Recovery · endurance" },
+  { name: "Shakers & Bottles", detail: "Carry the mark" },
+  { name: "LOG Apparel", detail: "Wear it louder" },
 ];
 
 const perks = [
@@ -27,25 +26,18 @@ const perks = [
   { icon: GlassWater, label: "Advice from people who train" },
 ];
 
-function ProductCard({ item }: { item: Product }) {
-  const dark = item.tone === "dark";
+function ProductCard({ item, accent }: { item: Product; accent: boolean }) {
   return (
-    <div
-      className={cn(
-        "relative flex h-40 w-60 shrink-0 flex-col justify-between overflow-hidden rounded-xl border p-5",
-        dark
-          ? "border-white/10 bg-tar-road text-white"
-          : "border-black/10 bg-elegant-grey text-tar-road"
-      )}
-    >
-      <GlassWater
-        className={cn("size-5", dark ? "text-white/80" : "text-tar-road/80")}
+    <div className="group flex h-72 w-56 shrink-0 flex-col items-center justify-between rounded-xl border border-border/60 bg-card/60 p-6 transition-colors hover:border-border hover:bg-card">
+      <SupplementTub
+        accent={accent}
+        className="h-40 w-auto drop-shadow-[0_12px_24px_rgba(0,0,0,0.45)] transition-transform duration-500 group-hover:-translate-y-1.5 group-hover:rotate-2"
       />
-      <div className="space-y-1">
-        <p className="font-display text-xl leading-none">{item.name}</p>
-        <p className={cn("text-xs", dark ? "text-white/50" : "text-tar-road/60")}>
-          {item.detail}
+      <div className="text-center">
+        <p className="font-display text-xl leading-tight text-foreground">
+          {item.name}
         </p>
+        <p className="mt-1 text-xs text-muted-foreground">{item.detail}</p>
       </div>
     </div>
   );
@@ -74,9 +66,9 @@ export function Shop() {
       </div>
 
       <div className="relative mt-12 pb-24">
-        <Marquee pauseOnHover className="[--duration:34s] [--gap:1.25rem]">
-          {products.map((item) => (
-            <ProductCard key={item.name} item={item} />
+        <Marquee pauseOnHover className="[--duration:36s] [--gap:1.25rem]">
+          {products.map((item, i) => (
+            <ProductCard key={item.name} item={item} accent={i % 2 === 1} />
           ))}
         </Marquee>
 

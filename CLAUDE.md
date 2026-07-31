@@ -47,9 +47,12 @@ src/app/
 src/components/
   log-mark.tsx                # the LOG monogram, drawn as SVG geometry
   icons.tsx                   # Instagram / TikTok glyphs (lucide dropped brand icons)
+  illustrations.tsx           # plate emblems, supplement tubs, engraved plate badge,
+                              #   plate glyph — geometry, never clip-art
+  textures.tsx                # film-grain overlay (SVG fractal noise)
   section-heading.tsx         # shared eyebrow + title + description
   site-header.tsx / site-footer.tsx
-  sections/                   # hero, highlights, programs, shop, membership,
+  sections/                   # hero, ticker, programs, shop, membership,
                               #   contact, cta
   ui/                         # shadcn primitives (button, card, badge)
   magicui/                    # marquee, blur-fade, animated-grid-pattern, dot-pattern,
@@ -100,3 +103,7 @@ Brand tokens live in `:root` in `globals.css` and are exposed to Tailwind via
   `@logfitnesshtf` · +977 98252 54929.
 - `lucide-react` no longer ships brand icons (Instagram, TikTok, etc.). Draw new
   social glyphs in `src/components/icons.tsx` rather than importing from lucide.
+- Stock-photo hosts (Unsplash, Pexels, …) are blocked by this environment's
+  network policy. Visuals are drawn as SVG in `src/components/illustrations.tsx`
+  in the brand's geometry-not-clip-art style. Real gym photography, when
+  available, goes in `public/images/` and can replace the emblem/tub panels.

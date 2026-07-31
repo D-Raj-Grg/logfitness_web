@@ -1,7 +1,7 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Hero } from "@/components/sections/hero";
-import { Highlights } from "@/components/sections/highlights";
+import { Ticker } from "@/components/sections/ticker";
 import { Programs } from "@/components/sections/programs";
 import { Shop } from "@/components/sections/shop";
 import { Membership } from "@/components/sections/membership";
@@ -14,7 +14,7 @@ export default function Home() {
       <SiteHeader />
       <main className="flex-1">
         <Hero />
-        <Highlights />
+        <Ticker />
         <Programs />
         <Shop />
         <Membership />
