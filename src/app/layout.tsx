@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Anton, JetBrains_Mono } from "next/font/google";
 
 import { Grain } from "@/components/textures";
+import { siteConfig } from "@/lib/site";
 
 import "./globals.css";
 
@@ -24,42 +25,65 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-const siteUrl = "https://logfitness.com";
+export const viewport: Viewport = {
+  themeColor: "#17181D",
+  width: "device-width",
+  initialScale: 1,
+};
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(siteConfig.url),
   title: {
-    default: "LOG — Lord of Gyms & Fitness",
-    template: "%s · LOG Fitness",
+    default: "LOG — Lord of Gyms & Fitness | Premium Gym in Hetauda, Nepal",
+    template: "%s · LOG Fitness Hetauda",
   },
-  description:
-    "Lord of Gyms & Fitness (LOG) — the premium gym in Hetauda, Nepal. Strength, cardio, Zumba and dance under one roof, plus a full retail supplement bar. Train hard. Wear it louder.",
+  description: siteConfig.description,
   keywords: [
-    "LOG",
+    "gym in Hetauda",
+    "gym Hetauda Nepal",
+    "fitness center Hetauda",
+    "Zumba classes Hetauda",
+    "dance classes Hetauda",
+    "strength training Hetauda",
+    "cardio gym Nepal",
+    "protein supplements Hetauda",
+    "whey protein Nepal",
+    "LOG Fitness",
     "Lord of Gyms",
-    "gym Hetauda",
-    "gym Nepal",
-    "Zumba Hetauda",
-    "dance fitness",
-    "protein supplements Nepal",
-    "cardio",
-    "strength training",
+    "Kapur Complex",
   ],
+  applicationName: "LOG Fitness",
+  category: "fitness",
   authors: [{ name: "Lord of Gyms & Fitness" }],
+  creator: "Lord of Gyms & Fitness",
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
-    title: "LOG — Lord of Gyms & Fitness",
+    title: "LOG — Lord of Gyms & Fitness | Premium Gym in Hetauda",
     description:
-      "Strength, cardio, Zumba, dance & supplements — Hetauda's premium gym. Train hard. Wear it louder.",
-    url: siteUrl,
-    siteName: "LOG Fitness",
+      "Strength, cardio, Zumba, dance & genuine supplements — Hetauda's premium gym at Kapur Complex. Train hard. Wear it louder.",
+    url: "/",
+    siteName: "LOG — Lord of Gyms & Fitness",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "LOG — Lord of Gyms & Fitness",
+    title: "LOG — Lord of Gyms & Fitness | Premium Gym in Hetauda",
     description:
-      "Strength, cardio, Zumba, dance & supplements — Hetauda's premium gym. Train hard. Wear it louder.",
+      "Strength, cardio, Zumba, dance & genuine supplements — Hetauda's premium gym at Kapur Complex. Train hard. Wear it louder.",
   },
 };
 

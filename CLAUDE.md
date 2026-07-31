@@ -41,9 +41,11 @@ npm run lint    # eslint — keep this clean before committing
 public/brand/                 # the two brand PDFs (served + linked from the site)
 src/app/
   layout.tsx                  # fonts (Inter / Anton / JetBrains Mono), metadata, <html class="dark">
-  page.tsx                    # composes the landing sections
+  page.tsx                    # composes the landing sections + JSON-LD
   globals.css                 # brand tokens + shadcn vars + Magic UI keyframes (Tailwind v4)
   icon.svg                    # favicon — the LOG monogram
+  robots.ts / sitemap.ts / manifest.ts   # SEO endpoints (Next file conventions)
+  opengraph-image.tsx         # branded share image, generated at build (next/og)
 src/components/
   log-mark.tsx                # the LOG monogram, drawn as SVG geometry
   icons.tsx                   # Instagram / TikTok glyphs (lucide dropped brand icons)
@@ -107,3 +109,9 @@ Brand tokens live in `:root` in `globals.css` and are exposed to Tailwind via
   network policy. Visuals are drawn as SVG in `src/components/illustrations.tsx`
   in the brand's geometry-not-clip-art style. Real gym photography, when
   available, goes in `public/images/` and can replace the emblem/tub panels.
+- **SEO**: the canonical URL resolves in `src/lib/site.ts` (env
+  `NEXT_PUBLIC_SITE_URL` → Vercel prod URL → localhost). JSON-LD lives in
+  `src/components/structured-data.tsx` (`ExerciseGym` + `WebSite`) — keep it in
+  sync with `site.ts`. Keep exactly one `<h1>` per page. `robots.ts`,
+  `sitemap.ts`, `manifest.ts` and `opengraph-image.tsx` are Next file
+  conventions; the OG image fetches Anton from Google Fonts at build time.

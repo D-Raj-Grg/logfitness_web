@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { StructuredData } from "@/components/structured-data";
 import { Hero } from "@/components/sections/hero";
 import { Ticker } from "@/components/sections/ticker";
 import { Programs } from "@/components/sections/programs";
@@ -11,6 +12,7 @@ import { CTA } from "@/components/sections/cta";
 export default function Home() {
   return (
     <>
+      <StructuredData />
       <SiteHeader />
       <main className="flex-1">
         <Hero />
