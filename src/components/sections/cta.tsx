@@ -22,23 +22,23 @@ export function CTA() {
         </BlurFade>
         <BlurFade delay={0.15} inView>
           <h2 className="font-display text-4xl leading-[0.95] text-foreground sm:text-6xl">
-            Establish immediate
+            Your first session
             <br />
-            market authority
+            starts today
           </h2>
         </BlurFade>
         <BlurFade delay={0.3} inView>
           <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-muted-foreground">
-            A world-class training facility paired with a distinct, marketable
-            identity — a moat against local competitors and a scalable model
-            across Nepal and beyond.
+            Strength, cardio, Zumba, dance and a full supplement bar — waiting
+            for you at Kapur Complex, Hetauda. Walk in for a tour or call to book
+            your spot.
           </p>
         </BlurFade>
         <BlurFade delay={0.45} inView>
           <div className="mt-10 flex justify-center">
-            <Link href="#brand-book">
+            <Link href="#contact">
               <ShimmerButton className="tracking-label text-xs font-medium">
-                Review the pitch deck
+                Come train with us
                 <ArrowUpRight className="ml-2 size-4" />
               </ShimmerButton>
             </Link>

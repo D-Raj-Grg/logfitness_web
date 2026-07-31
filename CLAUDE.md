@@ -4,10 +4,12 @@ Guidance for Claude Code (and other agents) working in this repository.
 
 ## Project
 
-**LOG — Lord of Gyms & Fitness.** Marketing / brand site for LOG, a premium
-fitness destination and athletic streetwear brand based in Kathmandu, Nepal.
-The site presents the brand identity, the logo system, merchandise, and hosts
-the downloadable brand-book PDFs.
+**LOG — Lord of Gyms & Fitness.** Marketing site for LOG, a premium gym in
+Kapur Complex, Hetauda, Nepal. The site sells the gym: its programs (strength,
+cardio, Zumba, dance), the retail supplement bar, and membership. It keeps the
+strong LOG brand look (mark, palette, type) but the content is gym-first, aimed
+at prospective members — not a brand/identity presentation. The brand-book PDFs
+are still linked (from the footer) for partners/press.
 
 Tagline: **"Train hard. Wear it louder."**
 
@@ -47,8 +49,8 @@ src/components/
   icons.tsx                   # Instagram / TikTok glyphs (lucide dropped brand icons)
   section-heading.tsx         # shared eyebrow + title + description
   site-header.tsx / site-footer.tsx
-  sections/                   # hero, stats, concept, identity, merch, brand-book,
-                              #   cta, contact
+  sections/                   # hero, highlights, programs, shop, membership,
+                              #   contact, cta
   ui/                         # shadcn primitives (button, card, badge)
   magicui/                    # marquee, blur-fade, animated-grid-pattern, dot-pattern,
                               #   number-ticker, shimmer-button, animated-shiny-text

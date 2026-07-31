@@ -9,10 +9,9 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const nav = [
-  { label: "Concept", href: "#concept" },
-  { label: "Identity", href: "#identity" },
-  { label: "Merch", href: "#merch" },
-  { label: "Brand Book", href: "#brand-book" },
+  { label: "Programs", href: "#programs" },
+  { label: "Supplements", href: "#shop" },
+  { label: "Membership", href: "#membership" },
   { label: "Contact", href: "#contact" },
 ];
 

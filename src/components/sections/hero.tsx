@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Dumbbell } from "lucide-react";
+import { ArrowRight, MapPin } from "lucide-react";
 
 import { LogMark } from "@/components/log-mark";
 import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
@@ -7,6 +7,8 @@ import { AnimatedShinyText } from "@/components/magicui/animated-shiny-text";
 import { BlurFade } from "@/components/magicui/blur-fade";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { cn } from "@/lib/utils";
+
+const disciplines = ["Strength", "Cardio", "Zumba", "Dance", "Supplements"];
 
 export function Hero() {
   return (
@@ -38,54 +40,61 @@ export function Hero() {
         <div className="flex flex-col items-center text-center">
           <BlurFade delay={0.1} inView>
             <div className="group mb-8 flex items-center gap-2 rounded-full border border-border bg-secondary/40 px-4 py-1.5">
-              <Dumbbell className="size-3.5 text-muted-foreground" />
+              <MapPin className="size-3.5 text-muted-foreground" />
               <AnimatedShinyText className="text-xs tracking-label">
-                Nepal&apos;s premier athletic lifestyle brand
+                Kapur Complex, Hetauda — Nepal
               </AnimatedShinyText>
             </div>
           </BlurFade>
 
           <BlurFade delay={0.2} inView>
-            <LogMark className="mx-auto mb-8 h-24 w-auto sm:h-32 md:h-40" />
+            <LogMark className="mx-auto mb-8 h-20 w-auto sm:h-28 md:h-32" />
           </BlurFade>
 
           <BlurFade delay={0.3} inView>
             <h1 className="font-display text-4xl leading-[0.95] text-foreground sm:text-6xl md:text-7xl">
-              Lord of Gyms
+              The gym that
               <br />
-              &amp; Fitness
+              trains it all
             </h1>
           </BlurFade>
 
           <BlurFade delay={0.45} inView>
             <p className="mx-auto mt-7 max-w-xl text-balance text-base leading-relaxed text-muted-foreground sm:text-lg">
-              More than a training facility — an athletic streetwear identity and
-              a premium fitness destination. Powerful, modern, sleek, and premium
-              yet accessible.
+              Strength, cardio, Zumba and dance under one roof — plus a full
+              retail bar of genuine protein and supplements. Lord of Gyms &amp;
+              Fitness is Hetauda&apos;s premium fitness destination.
             </p>
           </BlurFade>
 
           <BlurFade delay={0.6} inView>
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
-              <Link href="#brand-book">
+              <Link href="#membership">
                 <ShimmerButton className="tracking-label text-xs font-medium">
-                  Explore the identity
+                  Join the gym
                   <ArrowRight className="ml-2 size-4" />
                 </ShimmerButton>
               </Link>
               <Link
-                href="#concept"
+                href="#programs"
                 className="text-sm tracking-label text-muted-foreground transition-colors hover:text-foreground"
               >
-                Why &ldquo;LOG&rdquo; →
+                See what we offer →
               </Link>
             </div>
           </BlurFade>
 
           <BlurFade delay={0.75} inView>
-            <p className="mt-14 text-xs tracking-label text-muted-foreground/60">
-              Train hard. Wear it louder.
-            </p>
+            <ul className="mt-14 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+              {disciplines.map((d) => (
+                <li
+                  key={d}
+                  className="text-xs tracking-label text-muted-foreground/60"
+                >
+                  {d}
+                </li>
+              ))}
+            </ul>
           </BlurFade>
         </div>
       </div>

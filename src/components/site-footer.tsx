@@ -5,11 +5,16 @@ import { LogMark } from "@/components/log-mark";
 import { InstagramIcon, TikTokIcon } from "@/components/icons";
 import { siteConfig } from "@/lib/site";
 
-const brandLinks = [
-  { label: "Concept", href: "#concept" },
-  { label: "Identity", href: "#identity" },
-  { label: "Merch", href: "#merch" },
-  { label: "Brand Book", href: "#brand-book" },
+const exploreLinks = [
+  { label: "Programs", href: "#programs" },
+  { label: "Supplements", href: "#shop" },
+  { label: "Membership", href: "#membership" },
+  { label: "Contact", href: "#contact" },
+];
+
+const brandKit = [
+  { label: "Brand book (PDF)", href: "/brand/LOG-Logo-Identity-Presentation.pdf" },
+  { label: "Pitch deck (PDF)", href: "/brand/LOG-Fitness-Pitch-Deck.pdf" },
 ];
 
 export function SiteFooter() {
@@ -38,13 +43,26 @@ export function SiteFooter() {
                 <TikTokIcon className="size-4" />
               </SocialButton>
             </div>
+            <div className="flex flex-wrap gap-x-4 gap-y-1 pt-1">
+              {brandKit.map((doc) => (
+                <a
+                  key={doc.href}
+                  href={doc.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-muted-foreground/70 underline-offset-4 transition-colors hover:text-foreground hover:underline"
+                >
+                  {doc.label}
+                </a>
+              ))}
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-10 sm:grid-cols-3">
             <div className="space-y-3">
-              <p className="text-xs tracking-label text-foreground">Brand</p>
+              <p className="text-xs tracking-label text-foreground">Explore</p>
               <ul className="space-y-2">
-                {brandLinks.map((link) => (
+                {exploreLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}

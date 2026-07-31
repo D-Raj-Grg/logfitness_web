@@ -30,20 +30,23 @@ export const metadata: Metadata = {
     template: "%s · LOG Fitness",
   },
   description:
-    "Lord of Gyms & Fitness (LOG) — Nepal's premier athletic lifestyle brand. A premium fitness destination and athletic streetwear identity at Kapur Complex, Hetauda. Train hard. Wear it louder.",
+    "Lord of Gyms & Fitness (LOG) — the premium gym in Hetauda, Nepal. Strength, cardio, Zumba and dance under one roof, plus a full retail supplement bar. Train hard. Wear it louder.",
   keywords: [
     "LOG",
     "Lord of Gyms",
+    "gym Hetauda",
     "gym Nepal",
-    "fitness Kathmandu",
-    "athletic streetwear",
-    "premium gym",
+    "Zumba Hetauda",
+    "dance fitness",
+    "protein supplements Nepal",
+    "cardio",
+    "strength training",
   ],
   authors: [{ name: "Lord of Gyms & Fitness" }],
   openGraph: {
     title: "LOG — Lord of Gyms & Fitness",
     description:
-      "Nepal's premier athletic lifestyle brand. Train hard. Wear it louder.",
+      "Strength, cardio, Zumba, dance & supplements — Hetauda's premium gym. Train hard. Wear it louder.",
     url: siteUrl,
     siteName: "LOG Fitness",
     locale: "en_US",
@@ -53,7 +56,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "LOG — Lord of Gyms & Fitness",
     description:
-      "Nepal's premier athletic lifestyle brand. Train hard. Wear it louder.",
+      "Strength, cardio, Zumba, dance & supplements — Hetauda's premium gym. Train hard. Wear it louder.",
   },
 };
 
