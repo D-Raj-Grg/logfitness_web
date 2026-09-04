@@ -1,4 +1,4 @@
-import { MapPin, Phone } from "lucide-react";
+import { MapPin, Phone, Smartphone } from "lucide-react";
 
 import { SectionHeading } from "@/components/section-heading";
 import { BlurFade } from "@/components/magicui/blur-fade";
@@ -56,27 +56,44 @@ export function Contact() {
 
           {/* Call */}
           <BlurFade delay={0.25} inView>
-            <a
-              href={siteConfig.phoneHref}
-              className="group flex h-full min-h-[260px] flex-col justify-between rounded-xl border border-border/60 bg-card/60 p-8 transition-colors hover:border-border hover:bg-card"
-            >
+            <div className="group flex h-full min-h-[260px] flex-col justify-between rounded-xl border border-border/60 bg-card/60 p-8 transition-colors hover:border-border hover:bg-card">
               <div className="flex items-center gap-3">
                 <span className="flex size-11 items-center justify-center rounded-lg border border-border bg-secondary/50 text-foreground transition-colors group-hover:bg-secondary">
                   <Phone className="size-5" />
                 </span>
                 <span className="text-xs tracking-label text-muted-foreground">
-                  Call / WhatsApp
+                  Call the gym
                 </span>
               </div>
-              <div className="space-y-2">
-                <p className="font-mono text-2xl text-foreground sm:text-3xl">
+              <div className="space-y-3">
+                <a
+                  href={siteConfig.phoneHref}
+                  className="block font-mono text-2xl text-foreground underline-offset-4 hover:underline sm:text-3xl"
+                >
                   {siteConfig.phoneDisplay}
-                </p>
+                </a>
                 <p className="text-sm text-muted-foreground">
                   Memberships, merch drops &amp; enquiries
                 </p>
+                <p className="flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border/60 pt-3 text-sm">
+                  <a
+                    href={siteConfig.mobile.href}
+                    className="flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    <Smartphone className="size-3.5" />
+                    {siteConfig.mobile.display}
+                  </a>
+                  <a
+                    href={siteConfig.mobile.whatsappHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs tracking-label text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    WhatsApp →
+                  </a>
+                </p>
               </div>
-            </a>
+            </div>
           </BlurFade>
         </div>
 

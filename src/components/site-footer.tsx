@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPin, Phone } from "lucide-react";
+import { MapPin, Phone, Smartphone } from "lucide-react";
 
 import { LogMark } from "@/components/log-mark";
 import { InstagramIcon, TikTokIcon } from "@/components/icons";
@@ -9,6 +9,7 @@ const exploreLinks = [
   { label: "Programs", href: "#programs" },
   { label: "Supplements", href: "#shop" },
   { label: "Membership", href: "#membership" },
+  { label: "Pricing", href: "#pricing" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -111,6 +112,15 @@ export function SiteFooter() {
                   >
                     <Phone className="mt-0.5 size-4 shrink-0" />
                     {siteConfig.phoneDisplay}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href={siteConfig.mobile.href}
+                    className="flex items-start gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    <Smartphone className="mt-0.5 size-4 shrink-0" />
+                    {siteConfig.mobile.display}
                   </a>
                 </li>
                 <li>

@@ -55,13 +55,14 @@ src/components/
   section-heading.tsx         # shared eyebrow + title + description
   site-header.tsx / site-footer.tsx
   sections/                   # hero, ticker, programs, shop, membership,
-                              #   contact, cta
+                              #   pricing (rate card), contact, cta
   ui/                         # shadcn primitives (button, card, badge)
   magicui/                    # marquee, blur-fade, animated-grid-pattern, dot-pattern,
                               #   number-ticker, shimmer-button, animated-shiny-text
 src/lib/
   utils.ts                    # cn() helper
   site.ts                     # single source of truth for contact + social details
+  pricing.ts                  # the official rate card (memberships, fees, PT)
 components.json               # shadcn config
 ```
 
@@ -102,7 +103,12 @@ Brand tokens live in `:root` in `globals.css` and are exposed to Tailwind via
 - Run `npm run lint` and `npm run build` before committing; keep lint clean.
 - **Contact details** (phone, address, Instagram/TikTok) live in `src/lib/site.ts`
   — update them there, not inline. Current: Kapur Complex, Hetauda ·
-  `@logfitnesshtf` · +977 98252 54929.
+  `@logfitnesshtd` · landline **057-591985** (the default number shown
+  everywhere) · mobile/WhatsApp +977 98252 54929 (secondary).
+- **Prices** (membership tiers, registration fees, personal training) live in
+  `src/lib/pricing.ts` and feed both the Pricing section
+  (`src/components/sections/pricing.tsx`) and the JSON-LD offer catalog.
+  Update the rate card there, never inline.
 - `lucide-react` no longer ships brand icons (Instagram, TikTok, etc.). Draw new
   social glyphs in `src/components/icons.tsx` rather than importing from lucide.
 - Stock-photo hosts (Unsplash, Pexels, …) are blocked by this environment's
