@@ -1,4 +1,5 @@
 import { siteConfig } from "@/lib/site";
+import { currency, membershipTiers, trainingPackages } from "@/lib/pricing";
 
 /**
  * JSON-LD structured data (schema.org).
@@ -7,6 +8,16 @@ import { siteConfig } from "@/lib/site";
  * and knowledge panel for searches like "gym in Hetauda". Keep the details
  * in sync with src/lib/site.ts.
  */
+function offer(name: string, price: number) {
+  return {
+    "@type": "Offer",
+    name,
+    price,
+    priceCurrency: currency.code,
+    itemOffered: { "@type": "Service", name },
+  };
+}
+
 export function StructuredData() {
   const gym = {
     "@context": "https://schema.org",
@@ -18,6 +29,20 @@ export function StructuredData() {
     description: siteConfig.description,
     url: siteConfig.url,
     telephone: siteConfig.phoneE164,
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        contactType: "reception",
+        telephone: siteConfig.phoneE164,
+        areaServed: "NP",
+      },
+      {
+        "@type": "ContactPoint",
+        contactType: "sales",
+        telephone: siteConfig.mobile.e164,
+        areaServed: "NP",
+      },
+    ],
     image: `${siteConfig.url}/opengraph-image`,
     logo: `${siteConfig.url}/icon.svg`,
     address: {
@@ -27,17 +52,36 @@ export function StructuredData() {
       addressCountry: "NP",
     },
     sameAs: [siteConfig.instagram.href, siteConfig.tiktok.href],
-    hasOfferCatalog: {
-      "@type": "OfferCatalog",
-      name: "Programs & retail",
-      itemListElement: [
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Strength training" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Cardio training" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Zumba classes" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Dance classes" } },
-        { "@type": "Offer", itemOffered: { "@type": "Service", name: "Protein & supplement retail" } },
-      ],
-    },
+    hasOfferCatalog: [
+      {
+        "@type": "OfferCatalog",
+        name: "Programs & retail",
+        itemListElement: [
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Strength training" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Cardio training" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Zumba classes" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Dance classes" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Protein & supplement retail" } },
+        ],
+      },
+      {
+        "@type": "OfferCatalog",
+        name: "Membership",
+        itemListElement: membershipTiers.flatMap((tier) => [
+          offer(`${tier.name} — Daily pass`, tier.dailyPass),
+          ...tier.plans.map((plan) =>
+            offer(`${tier.name} — ${plan.term}`, plan.total)
+          ),
+        ]),
+      },
+      {
+        "@type": "OfferCatalog",
+        name: "Personal training",
+        itemListElement: trainingPackages.flatMap((pkg) =>
+          pkg.plans.map((plan) => offer(`${pkg.name} — ${plan.term}`, plan.total))
+        ),
+      },
+    ],
   };
 
   const website = {

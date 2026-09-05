@@ -23,11 +23,21 @@ export const siteConfig = {
   description:
     "Lord of Gyms & Fitness (LOG) — the premium gym at Kapur Complex, Hetauda, Nepal. Strength training, cardio, Zumba and dance classes under one roof, plus a retail bar of genuine protein and supplements.",
 
-  // Contact
-  phone: "9825254929",
-  phoneE164: "+9779825254929",
-  phoneHref: "tel:+9779825254929",
-  phoneDisplay: "+977 98252 54929",
+  // Contact — the gym landline is the default number everywhere on the site.
+  // Hetauda's STD code is 057, so the local form is 057-591985.
+  phone: "057591985",
+  phoneE164: "+97757591985",
+  phoneHref: "tel:+97757591985",
+  phoneDisplay: "057-591985",
+
+  // Mobile — secondary line, also on WhatsApp.
+  mobile: {
+    number: "9825254929",
+    e164: "+9779825254929",
+    href: "tel:+9779825254929",
+    display: "+977 98252 54929",
+    whatsappHref: "https://wa.me/9779825254929",
+  },
 
   address: {
     line: "Kapur Complex, Hetauda",

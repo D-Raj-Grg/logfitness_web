@@ -10,12 +10,12 @@ import { siteConfig } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 const perks = [
-  "Full access to the strength & cardio floors",
+  "Gym Only or Gym + Cardio — pick your floor",
   "Group classes — Zumba & dance included",
   "Member pricing on protein & supplements",
   "Guidance from trainers on the floor",
-  "Flexible plans for students & professionals",
-  "Clean, modern space built for training",
+  "Daily, monthly, 6-month & annual plans",
+  "No registration fee on 3-month plans and up",
 ];
 
 export function Membership() {
@@ -26,8 +26,8 @@ export function Membership() {
           <div>
             <SectionHeading
               eyebrow="Membership"
-              title="One membership, everything"
-              description="No add-ons, no upsells to train. Every LOG membership opens the whole floor and every class. Walk in for a tour or call to get started today."
+              title="Pick a plan, own the floor"
+              description="Two simple tiers, no hidden extras. Start with a day pass or a month, and the longer you commit the less you pay — the annual plan comes with four months free. Walk in for a tour or call to get started today."
             />
 
             <ul className="mt-10 grid gap-x-6 gap-y-3 sm:grid-cols-2">
@@ -45,9 +45,9 @@ export function Membership() {
 
             <BlurFade delay={0.3} inView>
               <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                <Link href="#contact">
+                <Link href="#pricing">
                   <ShimmerButton className="tracking-label text-xs font-medium">
-                    Get started
+                    See the rate card
                     <ArrowRight className="ml-2 size-4" />
                   </ShimmerButton>
                 </Link>

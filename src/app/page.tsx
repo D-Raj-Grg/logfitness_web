@@ -6,6 +6,7 @@ import { Ticker } from "@/components/sections/ticker";
 import { Programs } from "@/components/sections/programs";
 import { Shop } from "@/components/sections/shop";
 import { Membership } from "@/components/sections/membership";
+import { Pricing } from "@/components/sections/pricing";
 import { Contact } from "@/components/sections/contact";
 import { CTA } from "@/components/sections/cta";
 
@@ -20,6 +21,7 @@ export default function Home() {
         <Programs />
         <Shop />
         <Membership />
+        <Pricing />
         <Contact />
         <CTA />
       </main>
