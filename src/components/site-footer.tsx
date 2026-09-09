@@ -10,6 +10,7 @@ const exploreLinks = [
   { label: "Supplements", href: "#shop" },
   { label: "Membership", href: "#membership" },
   { label: "Pricing", href: "#pricing" },
+  { label: "Reviews", href: "#reviews" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -45,6 +46,12 @@ export function SiteFooter() {
               </SocialButton>
             </div>
             <div className="flex flex-wrap gap-x-4 gap-y-1 pt-1">
+              <Link
+                href="/review"
+                className="text-xs text-muted-foreground/70 underline-offset-4 transition-colors hover:text-foreground hover:underline"
+              >
+                Leave a Google review
+              </Link>
               {brandKit.map((doc) => (
                 <a
                   key={doc.href}

@@ -47,6 +47,18 @@ export const siteConfig = {
       "https://www.google.com/maps/search/?api=1&query=Kapur+Complex+Hetauda+Nepal",
   },
 
+  // Google Business Profile — powers the "leave a review" flow.
+  //
+  // placeId: get it from https://developers.google.com/maps/documentation/places/web-service/place-id
+  // (search "Lord of Gyms & Fitness Hetauda", copy the ChIJ… string). Once it
+  // is filled in, `writeReviewHref` below opens Google's write-a-review box
+  // directly instead of just the listing.
+  google: {
+    placeId: "",
+    /** Short share link to the listing — the fallback until placeId is set. */
+    listingHref: "https://share.google/nLUzzPjw5Pvg4buCA",
+  },
+
   // Social
   instagram: {
     handle: "@logfitnesshtd",
@@ -57,3 +69,13 @@ export const siteConfig = {
     href: "https://www.tiktok.com/@logfitnesshtd",
   },
 } as const;
+
+/**
+ * Deep link that opens Google's "write a review" dialog for LOG.
+ *
+ * With a Place ID this lands the member straight on the star picker; without
+ * one it falls back to the listing, where they still reach reviews in a tap.
+ */
+export const writeReviewHref = siteConfig.google.placeId
+  ? `https://search.google.com/local/writereview?placeid=${siteConfig.google.placeId}`
+  : siteConfig.google.listingHref;
