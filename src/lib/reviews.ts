@@ -150,3 +150,10 @@ export const googleRating: {
   /** Last time the two numbers above were checked against the listing. */
   checked: "2026-09",
 };
+
+/**
+ * Below this, the raw count is more discouraging than the score is
+ * persuasive, so the card shows the rating alone. Never inflate the number:
+ * it sits next to a link that opens the real listing.
+ */
+export const MIN_COUNT_TO_SHOW = 10;

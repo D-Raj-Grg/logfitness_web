@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import {
   displayedTestimonials,
   googleRating,
+  MIN_COUNT_TO_SHOW,
   type Testimonial,
 } from "@/lib/reviews";
 import { readReviewsHref, writeReviewHref } from "@/lib/site";
@@ -39,8 +40,9 @@ export function Reviews() {
               <div className="space-y-1.5">
                 <Stars value={Math.round(googleRating.score)} />
                 <p className="text-xs tracking-label text-muted-foreground">
-                  {googleRating.count}{" "}
-                  {googleRating.count === 1 ? "review" : "reviews"} on Google
+                  {googleRating.count >= MIN_COUNT_TO_SHOW
+                    ? `${googleRating.count} reviews on Google`
+                    : "Rated on Google"}
                 </p>
                 <a
                   href={readReviewsHref}
