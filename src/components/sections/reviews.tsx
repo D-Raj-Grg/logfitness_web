@@ -5,7 +5,7 @@ import { SectionHeading } from "@/components/section-heading";
 import { BlurFade } from "@/components/magicui/blur-fade";
 import { Button } from "@/components/ui/button";
 import { googleRating, testimonials } from "@/lib/reviews";
-import { writeReviewHref } from "@/lib/site";
+import { readReviewsHref, writeReviewHref } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export function Reviews() {
@@ -33,6 +33,14 @@ export function Reviews() {
                   {googleRating.count}{" "}
                   {googleRating.count === 1 ? "review" : "reviews"} on Google
                 </p>
+                <a
+                  href={readReviewsHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block text-xs text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
+                >
+                  Read them on Google →
+                </a>
               </div>
             </div>
             <Button asChild size="lg">

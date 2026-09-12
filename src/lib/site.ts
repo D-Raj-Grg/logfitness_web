@@ -42,6 +42,8 @@ export const siteConfig = {
   address: {
     line: "Kapur Complex, Hetauda",
     city: "Hetauda",
+    region: "Bagmati Province",
+    postalCode: "44107",
     country: "Nepal",
     mapsHref:
       "https://www.google.com/maps/search/?api=1&query=Kapur+Complex+Hetauda+Nepal",
@@ -49,13 +51,12 @@ export const siteConfig = {
 
   // Google Business Profile — powers the "leave a review" flow.
   //
-  // placeId: get it from https://developers.google.com/maps/documentation/places/web-service/place-id
-  // (search "Lord of Gyms & Fitness Hetauda", copy the ChIJ… string). Once it
-  // is filled in, `writeReviewHref` below opens Google's write-a-review box
-  // directly instead of just the listing.
+  // placeId identifies the listing "LOG Fitness - Lord of Gyms & Fitness,
+  // Kapur Complex, Hetauda". If the listing is ever recreated, get the new ID
+  // from https://developers.google.com/maps/documentation/places/web-service/place-id
   google: {
-    placeId: "",
-    /** Short share link to the listing — the fallback until placeId is set. */
+    placeId: "ChIJR3tEBsdJ6zkR-uCQ7lDT2v0",
+    /** Short share link to the listing — used as the read-the-reviews link. */
     listingHref: "https://share.google/nLUzzPjw5Pvg4buCA",
   },
 
@@ -78,4 +79,9 @@ export const siteConfig = {
  */
 export const writeReviewHref = siteConfig.google.placeId
   ? `https://search.google.com/local/writereview?placeid=${siteConfig.google.placeId}`
+  : siteConfig.google.listingHref;
+
+/** The listing's full review list — for reading them, not writing one. */
+export const readReviewsHref = siteConfig.google.placeId
+  ? `https://search.google.com/local/reviews?placeid=${siteConfig.google.placeId}`
   : siteConfig.google.listingHref;
