@@ -3,17 +3,26 @@ import { Quote, Star } from "lucide-react";
 
 import { SectionHeading } from "@/components/section-heading";
 import { BlurFade } from "@/components/magicui/blur-fade";
+import { Marquee } from "@/components/magicui/marquee";
 import { Button } from "@/components/ui/button";
-import { googleRating, testimonials } from "@/lib/reviews";
+import {
+  displayedTestimonials,
+  googleRating,
+  type Testimonial,
+} from "@/lib/reviews";
 import { readReviewsHref, writeReviewHref } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export function Reviews() {
-  const hasQuotes = testimonials.length > 0;
+  const quotes = displayedTestimonials;
+  // Two rows running opposite ways read as a wall of reviews rather than a
+  // single ticker. Below that count a static grid looks less thin.
+  const marquee = quotes.length >= 6;
+  const half = Math.ceil(quotes.length / 2);
 
   return (
     <section id="reviews" className="border-b border-border/60">
-      <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8">
+      <div className="mx-auto max-w-6xl px-5 pt-24 sm:px-8">
         <SectionHeading
           eyebrow="Member reviews"
           title="What members say"
@@ -48,36 +57,12 @@ export function Reviews() {
             </Button>
           </div>
         </BlurFade>
+      </div>
 
-        {hasQuotes ? (
-          <div className="mt-5 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {testimonials.map((t, i) => (
-              <BlurFade key={t.author + i} delay={0.1 + i * 0.05} inView>
-                <figure className="flex h-full flex-col justify-between gap-6 rounded-xl border border-border/60 bg-card/60 p-7 transition-colors hover:border-border hover:bg-card">
-                  <div className="space-y-4">
-                    <Quote className="size-5 text-muted-foreground" />
-                    <blockquote className="text-base leading-relaxed text-foreground">
-                      {t.quote}
-                    </blockquote>
-                  </div>
-                  <figcaption className="space-y-2 border-t border-border/60 pt-4">
-                    <Stars value={t.rating} />
-                    <p className="text-sm font-semibold text-foreground">
-                      {t.author}
-                    </p>
-                    {t.context ? (
-                      <p className="text-xs tracking-label text-muted-foreground">
-                        {t.context}
-                      </p>
-                    ) : null}
-                  </figcaption>
-                </figure>
-              </BlurFade>
-            ))}
-          </div>
-        ) : (
+      {quotes.length === 0 ? (
+        <div className="mx-auto max-w-6xl px-5 pb-24 pt-5 sm:px-8">
           <BlurFade delay={0.25} inView>
-            <div className="mt-5 rounded-xl border border-dashed border-border/60 bg-card/30 p-10 text-center">
+            <div className="rounded-xl border border-dashed border-border/60 bg-card/30 p-10 text-center">
               <p className="font-display text-2xl leading-tight text-foreground">
                 Trained with us?
               </p>
@@ -98,9 +83,77 @@ export function Reviews() {
               </div>
             </div>
           </BlurFade>
-        )}
-      </div>
+        </div>
+      ) : marquee ? (
+        <BlurFade delay={0.2} inView>
+          {/* Full-bleed: the rows should run off both edges of the viewport. */}
+          <div className="relative mt-14 pb-24">
+            <Marquee pauseOnHover className="[--duration:70s] [--gap:1.25rem]">
+              {quotes.slice(0, half).map((t) => (
+                <ReviewCard key={t.author} testimonial={t} />
+              ))}
+            </Marquee>
+            <Marquee
+              reverse
+              pauseOnHover
+              className="mt-5 [--duration:80s] [--gap:1.25rem]"
+            >
+              {quotes.slice(half).map((t) => (
+                <ReviewCard key={t.author} testimonial={t} />
+              ))}
+            </Marquee>
+            {/* Fade the rows into the page edges instead of cutting them off. */}
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-background to-transparent sm:w-32" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-background to-transparent sm:w-32" />
+          </div>
+        </BlurFade>
+      ) : (
+        <div className="mx-auto max-w-6xl px-5 pb-24 pt-5 sm:px-8">
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {quotes.map((t, i) => (
+              <BlurFade key={t.author} delay={0.1 + i * 0.05} inView>
+                <ReviewCard testimonial={t} className="h-full w-full" />
+              </BlurFade>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
+  );
+}
+
+function ReviewCard({
+  testimonial: t,
+  className,
+}: {
+  testimonial: Testimonial;
+  className?: string;
+}) {
+  return (
+    <figure
+      className={cn(
+        "flex w-[19rem] shrink-0 flex-col justify-between gap-5 rounded-xl border border-border/60 bg-card/60 p-6 transition-colors hover:border-border hover:bg-card sm:w-[22rem]",
+        className
+      )}
+    >
+      <div className="space-y-3">
+        <Quote className="size-4 text-muted-foreground" />
+        <blockquote className="text-sm leading-relaxed text-foreground">
+          {t.quote}
+        </blockquote>
+      </div>
+      <figcaption className="flex items-center gap-3 border-t border-border/60 pt-4">
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border bg-secondary/50 font-mono text-sm text-foreground">
+          {t.author.charAt(0)}
+        </span>
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold text-foreground">
+            {t.author}
+          </p>
+          <Stars value={t.rating} />
+        </div>
+      </figcaption>
+    </figure>
   );
 }
 
@@ -112,7 +165,7 @@ function Stars({ value }: { value: number }) {
           key={i}
           aria-hidden
           className={cn(
-            "size-3.5",
+            "size-3",
             i <= value
               ? "fill-current text-foreground"
               : "text-muted-foreground/40"
