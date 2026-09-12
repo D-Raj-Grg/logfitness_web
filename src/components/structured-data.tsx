@@ -49,6 +49,8 @@ export function StructuredData() {
       "@type": "PostalAddress",
       streetAddress: "Kapur Complex",
       addressLocality: siteConfig.address.city,
+      addressRegion: siteConfig.address.region,
+      postalCode: siteConfig.address.postalCode,
       addressCountry: "NP",
     },
     sameAs: [siteConfig.instagram.href, siteConfig.tiktok.href],
