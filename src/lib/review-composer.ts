@@ -32,13 +32,13 @@ export const aspects: Aspect[] = [
     label: "Trainers & coaching",
     improveLabel: "Coaching",
     praise: [
-      "The trainers actually watch your form and correct it instead of just sitting at the desk.",
-      "Coaching here is proper — they built me a plan and kept adjusting it as I got stronger.",
-      "The trainers know what they're doing and they're patient with beginners.",
+      "The trainers actually watch your form and correct you instead of sitting at the desk.",
+      "They made me a proper plan and kept changing it as I got stronger.",
+      "Trainers know their stuff and they're patient if you're new to this.",
     ],
     improve: [
-      "The trainers could spend more time on the floor helping people with their form.",
-      "I'd like more guidance from the coaching staff, especially for beginners.",
+      "The trainers could spend more time on the floor helping people with form.",
+      "Would like a bit more guidance from the coaches, especially for beginners.",
     ],
   },
   {
@@ -46,13 +46,13 @@ export const aspects: Aspect[] = [
     label: "Equipment",
     improveLabel: "Equipment",
     praise: [
-      "The equipment is well maintained and there's enough of it that you're not queuing for a rack.",
-      "Good range of machines and free weights — everything I need for a full session.",
-      "Machines and plates are in solid condition, nothing broken or held together with tape.",
+      "Equipment is well looked after and there's enough of it that you're not waiting for a rack.",
+      "Good range of machines and free weights. Everything I need for a full session.",
+      "Machines and plates are all in good condition. Nothing broken or taped up.",
     ],
     improve: [
-      "Some of the machines could use servicing, and a few more plates would help at peak time.",
-      "It gets hard to find a free rack in the evening — more equipment would fix that.",
+      "Some machines need servicing and a few more plates would help at peak time.",
+      "Hard to get a free rack in the evening. More equipment would sort that out.",
     ],
   },
   {
@@ -60,13 +60,13 @@ export const aspects: Aspect[] = [
     label: "Cleanliness",
     improveLabel: "Cleanliness",
     praise: [
-      "The place is genuinely clean — floors, mats and changing area all kept properly.",
-      "Cleanliness is one of the best things here, it never smells or feels neglected.",
-      "They keep the gym spotless, which honestly isn't common around here.",
+      "The place is properly clean. Floors, mats, changing room, all of it.",
+      "Cleanliness is one of the best things here. It never smells.",
+      "They keep it spotless, which honestly isn't that common around here.",
     ],
     improve: [
-      "The changing area could be cleaned more often, especially in the evening.",
-      "Cleanliness slips a bit at busy times — more frequent wipe-downs would help.",
+      "Changing area needs cleaning more often, especially in the evening.",
+      "Cleanliness slips a bit when it gets busy. More frequent wipe downs would help.",
     ],
   },
   {
@@ -74,13 +74,13 @@ export const aspects: Aspect[] = [
     label: "Zumba & dance",
     improveLabel: "Classes",
     praise: [
-      "The Zumba and dance classes are a lot of fun — good energy and a proper workout.",
-      "I come mainly for the dance classes and the instructor keeps the whole room going.",
-      "Zumba sessions are well run and never feel repetitive.",
+      "Zumba and dance classes are good fun and a proper workout.",
+      "I mostly come for the dance classes. The instructor keeps the whole room going.",
+      "Zumba sessions are well run and they never get boring.",
     ],
     improve: [
-      "More class timings would help — the current slots don't suit everyone's schedule.",
-      "The dance classes fill up fast; a second batch would be good.",
+      "More class timings would help. The slots right now don't suit everyone.",
+      "Dance classes fill up fast. A second batch would be good.",
     ],
   },
   {
@@ -88,13 +88,13 @@ export const aspects: Aspect[] = [
     label: "Cardio floor",
     improveLabel: "Cardio floor",
     praise: [
-      "Cardio section has everything — treadmills, cycles, and they all actually work.",
-      "Good cardio setup, I can get a full session in without waiting for a machine.",
-      "The cardio floor is well laid out and never feels cramped.",
+      "Cardio section has everything. Treadmills, cycles, and they all work.",
+      "Good cardio setup. I can finish a session without waiting for a machine.",
+      "The cardio floor is well laid out and never feels packed.",
     ],
     improve: [
-      "A couple more treadmills would help, they're all taken in the morning.",
-      "The cardio machines could use better maintenance.",
+      "A couple more treadmills would help. They're all taken in the morning.",
+      "The cardio machines could be maintained a bit better.",
     ],
   },
   {
@@ -102,12 +102,12 @@ export const aspects: Aspect[] = [
     label: "Supplement bar",
     improveLabel: "Supplement bar",
     praise: [
-      "Handy that they stock genuine supplements in-house — no guessing whether it's real.",
-      "The supplement bar saves a trip; the staff explain what you actually need instead of upselling.",
-      "Good to have protein and supplements available right at the gym.",
+      "Handy that they keep real supplements in the gym. No worrying about whether it's fake.",
+      "The supplement bar saves a trip and the staff tell you what you actually need instead of pushing stuff on you.",
+      "Good to have protein and supplements right there at the gym.",
     ],
     improve: [
-      "The supplement bar could stock a wider range of brands.",
+      "The supplement bar could stock a few more brands.",
       "Would be good to see more options at the supplement counter.",
     ],
   },
@@ -116,12 +116,12 @@ export const aspects: Aspect[] = [
     label: "Value for money",
     improveLabel: "Pricing",
     praise: [
-      "For what you get, the membership is very reasonably priced.",
-      "Value for money is strong — the facilities are well above what the fee suggests.",
-      "The rates are fair, especially on the longer plans.",
+      "For what you get, the fee is very reasonable.",
+      "Good value. The place is better than the price suggests.",
+      "Rates are fair, especially if you take one of the longer plans.",
     ],
     improve: [
-      "The pricing feels a little steep for what's currently on offer.",
+      "Pricing feels a bit steep for what's on offer right now.",
       "Some more flexibility in the membership plans would be welcome.",
     ],
   },
@@ -130,13 +130,13 @@ export const aspects: Aspect[] = [
     label: "Opening hours",
     improveLabel: "Opening hours",
     praise: [
-      "Opening early makes a real difference — I can train before work and still make it on time.",
-      "The timings work well for me, early morning and late evening are both covered.",
-      "Long opening hours mean I can come whenever my day allows.",
+      "Opening early makes a big difference. I train before work and still get in on time.",
+      "Timings suit me well. Early morning and late evening are both covered.",
+      "Long opening hours mean I can come whenever I get the time.",
     ],
     improve: [
-      "Slightly longer hours in the evening would help those of us who finish work late.",
-      "The timings are a bit tight — opening earlier or closing later would be better.",
+      "Slightly longer evening hours would help those of us who finish work late.",
+      "Timings are a bit tight. Opening earlier or closing later would be better.",
     ],
   },
   {
@@ -144,13 +144,13 @@ export const aspects: Aspect[] = [
     label: "Atmosphere",
     improveLabel: "Atmosphere",
     praise: [
-      "The atmosphere pushes you — serious about training but nobody's judging you.",
-      "Good crowd and good music, it's the kind of place that makes you want to show up.",
-      "Everyone here is friendly and it's a genuinely motivating environment.",
+      "The atmosphere pushes you. People are serious about training but nobody judges you.",
+      "Good crowd and good music. It's the kind of place that makes you want to show up.",
+      "Everyone here is friendly and it's a motivating place to train.",
     ],
     improve: [
-      "It gets very crowded at peak hours, which changes the whole atmosphere.",
-      "Some gym etiquette reminders would help — weights often aren't racked.",
+      "Gets very crowded at peak hours and that changes the whole feel of the place.",
+      "People often don't rack their weights. A few reminders would help.",
     ],
   },
   {
@@ -159,8 +159,8 @@ export const aspects: Aspect[] = [
     improveLabel: "Front desk",
     praise: [
       "Front desk staff are polite and sort out membership questions without any fuss.",
-      "The reception team is helpful and remembers regulars by name.",
-      "Signing up was quick and the staff explained every plan clearly.",
+      "The reception team is helpful and they remember the regulars.",
+      "Signing up was quick and they explained every plan clearly.",
     ],
     improve: [
       "Reception can be slow to respond when it's busy.",
@@ -171,39 +171,41 @@ export const aspects: Aspect[] = [
 
 const openers: Record<Tone, string[]> = {
   praise: [
-    "Been training at LOG for a while now and it's easily the best gym in Hetauda.",
+    "I've been training at LOG for a few months now and it's the best gym I've been to in Hetauda.",
     "Joined LOG a few months back and I'm really glad I did.",
-    "LOG has become my regular gym and I'd recommend it to anyone in Hetauda.",
-    "Really happy with LOG Fitness.",
-    "Great experience at LOG so far.",
+    "LOG is my regular gym now and I'd tell anyone in Hetauda to check it out.",
+    "Really happy with this place.",
+    "Good experience at LOG so far.",
   ],
   improve: [
-    "I've been training at LOG and there's a lot to like, but a few things could be better.",
-    "Decent gym overall, though there's room for improvement.",
-    "Mixed experience at LOG.",
-    "LOG has potential but a few things need attention.",
+    "I've been training at LOG for a bit. A lot of it is good but a few things need work.",
+    "Decent gym overall, but there's room to improve.",
+    "Mixed feelings about this one.",
+    "LOG has potential but a few things need sorting out.",
   ],
 };
 
 const closers: Record<Tone, string[]> = {
   praise: [
-    "Highly recommended if you're looking for a serious gym in Hetauda.",
-    "Worth every rupee — would definitely recommend.",
-    "If you're thinking about joining, go for it.",
+    "Would recommend it if you're after a serious gym in Hetauda.",
+    "Worth the money. Would recommend.",
+    "If you're thinking about joining, just go.",
     "Happy to be a member here.",
     "Five stars from me.",
   ],
   improve: [
     "Hoping these get sorted, because the basics are already there.",
-    "Would happily raise this if things improve.",
+    "Would happily raise my rating if things improve.",
     "Still worth a look, but there's work to do.",
-    "Sharing this as honest feedback rather than a complaint.",
+    "Sharing this as honest feedback, not a complaint.",
   ],
 };
 
 /** Small deterministic PRNG so a re-roll produces a different, repeatable draft. */
 function mulberry32(seed: number) {
-  let a = seed >>> 0;
+  // Scramble first: raw nearby seeds otherwise produce correlated first draws,
+  // which would make a re-roll look like the same review again.
+  let a = Math.imul(seed ^ (seed >>> 16), 0x45d9f3b) >>> 0;
   return () => {
     a = (a + 0x6d2b79f5) >>> 0;
     let t = Math.imul(a ^ (a >>> 15), 1 | a);

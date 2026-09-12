@@ -10,10 +10,15 @@ import { cn } from "@/lib/utils";
 
 const ratings = [1, 2, 3, 4, 5];
 
+const randomSeed = () => Math.floor(Math.random() * 0x7fffffff);
+
 export function ReviewComposer() {
   const [rating, setRating] = useState(0);
   const [hovered, setHovered] = useState(0);
   const [selected, setSelected] = useState<string[]>([]);
+  // Seeded fresh on the first star tap, so two members who pick the same
+  // rating and chips do not walk away with byte-identical text. Only ever set
+  // from a click handler, so the server and first client render still agree.
   const [seed, setSeed] = useState(1);
   /** The member's own edits, which replace the generated text until they change
    *  the rating, the chips or the wording. */
@@ -50,6 +55,7 @@ export function ReviewComposer() {
 
   function choose(value: number) {
     setRating(value);
+    setSeed(randomSeed());
     regenerate();
   }
 
@@ -61,7 +67,7 @@ export function ReviewComposer() {
   }
 
   function reroll() {
-    setSeed((s) => s + 1);
+    setSeed(randomSeed());
     regenerate();
   }
 
@@ -80,7 +86,7 @@ export function ReviewComposer() {
 
   return (
     <div className="space-y-10">
-      {/* 01 — rating */}
+      {/* 01. Rating */}
       <Step index="01" title="How was your experience?">
         <div
           className="flex flex-wrap items-center gap-2"
@@ -119,7 +125,7 @@ export function ReviewComposer() {
         </div>
       </Step>
 
-      {/* 02 — aspects */}
+      {/* 02. Aspects */}
       <Step
         index="02"
         title={
@@ -156,7 +162,7 @@ export function ReviewComposer() {
         )}
       </Step>
 
-      {/* 03 — draft */}
+      {/* 03. Draft */}
       <Step index="03" title="Your draft" muted={!rating}>
         {rating === 0 ? (
           <p className="text-sm text-muted-foreground">
@@ -208,15 +214,16 @@ export function ReviewComposer() {
             </div>
 
             <p className="text-sm leading-relaxed text-muted-foreground">
-              This is a starting point — please edit it so it sounds like you.
-              Reviews in your own words are more useful to people deciding
-              whether to join, and Google is more likely to keep them.
+              This is just a starting point. Change it so it sounds like
+              you. Reviews in someone&apos;s own words are far more useful to
+              people deciding whether to join, and Google is more likely to
+              keep them.
             </p>
           </div>
         )}
       </Step>
 
-      {/* 04 — post */}
+      {/* 04. Post */}
       <Step index="04" title="Post it on Google" muted={!rating}>
         <div className="space-y-4">
           <Button
@@ -230,15 +237,16 @@ export function ReviewComposer() {
             </a>
           </Button>
           <p className="text-sm text-muted-foreground">
-            Opens in a new tab — paste your review, set the stars, and post.
+            Opens in a new tab. Paste your review, set the stars, and post.
           </p>
 
           {isCritical && (
             <div className="rounded-xl border border-border/60 bg-card/60 p-5">
               <p className="text-sm leading-relaxed text-foreground">
-                Sorry it wasn&apos;t what you expected. Post the review if you
-                want to — honest feedback helps us. If you&apos;d also like us
-                to fix it directly, message the gym and we&apos;ll sort it out.
+                Sorry it wasn&apos;t what you expected. Post the review if
+                you want to, honest feedback helps us. And if you&apos;d like
+                us to fix it directly, message the gym and we&apos;ll sort it
+                out.
               </p>
               <div className="mt-4 flex flex-wrap gap-3">
                 <Button asChild variant="outline" size="sm">

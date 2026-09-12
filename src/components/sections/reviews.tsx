@@ -17,7 +17,7 @@ export function Reviews() {
         <SectionHeading
           eyebrow="Member reviews"
           title="What members say"
-          description="Rated by the people who actually train here. Read them on Google — or add yours."
+          description="Rated by the people who actually train here. Read them on Google, or add yours."
         />
 
         {/* Rating summary */}

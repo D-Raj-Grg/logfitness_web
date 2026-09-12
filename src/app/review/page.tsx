@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Leave a review",
   description:
-    "Trained at LOG? Leave us a Google review — pick your rating, tap what stood out, and post it in under a minute.",
+    "Trained at LOG? Leave us a Google review. Pick your rating, tap what stood out, and post it in under a minute.",
   alternates: { canonical: "/review" },
   // The short URL behind the front-desk QR code. It is for members who already
   // train here, not a page that should compete in search.
@@ -24,7 +24,7 @@ export default function ReviewPage() {
     <>
       <header className="border-b border-border/60">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-5 py-5 sm:px-8">
-          <Link href="/" aria-label="LOG — home">
+          <Link href="/" aria-label="LOG home">
             <LogMark className="h-6 w-auto" />
           </Link>
           <Link
@@ -53,9 +53,9 @@ export default function ReviewPage() {
               Leave us a review
             </h1>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
-              A minute of your time helps other people in Hetauda find a gym
+              A minute of your time helps someone else in Hetauda find a gym
               they can trust. Pick your rating, tap what stood out, and
-              we&apos;ll draft it — you make it yours.
+              we&apos;ll start you off. Then put it in your own words.
             </p>
             <p className="mt-6 flex items-center gap-2 text-sm text-muted-foreground">
               <Star className="size-4 fill-current text-foreground" />
