@@ -39,6 +39,7 @@ npm run lint    # eslint — keep this clean before committing
 
 ```
 public/brand/                 # the two brand PDFs (served + linked from the site)
+public/images/social/         # Instagram / TikTok profile screenshots (Social section)
 src/app/
   layout.tsx                  # fonts (Inter / Anton / JetBrains Mono), metadata, <html class="dark">
   page.tsx                    # composes the landing sections + JSON-LD
@@ -63,8 +64,6 @@ src/lib/
   utils.ts                    # cn() helper
   site.ts                     # single source of truth for contact + social details
   pricing.ts                  # the official rate card (memberships, fees, PT)
-  social-posts.ts             # curated 9:16 Instagram/TikTok tiles (images in
-                              #   public/images/social/); empty → live profile embeds
 components.json               # shadcn config
 ```
 
