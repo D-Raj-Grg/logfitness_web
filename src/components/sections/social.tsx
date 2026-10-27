@@ -1,29 +1,36 @@
+import Image from "next/image";
 import Script from "next/script";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Play } from "lucide-react";
 
 import { SectionHeading } from "@/components/section-heading";
 import { BlurFade } from "@/components/magicui/blur-fade";
 import { InstagramIcon, TikTokIcon } from "@/components/icons";
+import { cn } from "@/lib/utils";
 import { siteConfig } from "@/lib/site";
+import { socialPosts } from "@/lib/social-posts";
 
 /**
- * Live Instagram + TikTok profile feeds, using each platform's own public
- * profile embed — no API key, login or token. Both load in the visitor's
- * browser, so the section keeps working as new posts go up. Each frame is a
- * tall 9:16-ish panel that scrolls inside itself; the "Open on …" link is the
- * fallback if a platform's embed is blocked (ad-blockers, privacy modes).
+ * Instagram + TikTok, two ways:
+ *  - Curated tiles (src/lib/social-posts.ts): static 9:16 thumbnails that link
+ *    to the post. Fast, can't be rate-limited, no third-party scripts.
+ *  - Live profile embeds (the default until tiles are added): each platform's
+ *    own public embed — no API key or login — but they can show "Too many
+ *    requests", so the "Open on …" link stays as the way out.
  */
 function Feed({
   icon,
   network,
   handle,
   href,
+  frameClassName,
   children,
 }: {
   icon: React.ReactNode;
   network: string;
   handle: string;
   href: string;
+  /** Height of the embed frame — sized to what each platform renders. */
+  frameClassName: string;
   children: React.ReactNode;
 }) {
   return (
@@ -49,9 +56,13 @@ function Feed({
         </a>
       </div>
 
-      {/* 9:16 frame — scrolls inside itself so the page stays short. */}
-      <div className="mx-auto w-full max-w-md flex-1 p-4 sm:p-6">
-        <div className="aspect-[9/16] w-full overflow-y-auto overflow-x-hidden rounded-lg bg-white">
+      <div className="flex flex-1 items-center justify-center p-4 sm:p-6">
+        <div
+          className={cn(
+            "w-full max-w-sm overflow-y-auto overflow-x-hidden rounded-lg bg-white",
+            frameClassName
+          )}
+        >
           {children}
         </div>
       </div>
@@ -68,8 +79,76 @@ function Feed({
   );
 }
 
+function Tiles() {
+  return (
+    <ul className="mt-16 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-6">
+      {socialPosts.map((post, i) => {
+        const network = post.platform === "instagram" ? "Instagram" : "TikTok";
+        return (
+          <li key={post.href}>
+            <BlurFade delay={0.08 + (i % 6) * 0.06} inView>
+              <a
+                href={post.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${post.alt} — open on ${network}`}
+                className="group relative block aspect-[9/16] overflow-hidden rounded-xl border border-border/60 bg-tar-road transition-colors hover:border-border"
+              >
+                <Image
+                  src={post.image}
+                  alt={post.alt}
+                  fill
+                  sizes="(min-width: 1280px) 16vw, (min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <span className="absolute left-3 top-3 flex size-8 items-center justify-center rounded-full bg-tar-road/80 text-white backdrop-blur-sm">
+                  {post.platform === "instagram" ? (
+                    <InstagramIcon className="size-4" />
+                  ) : (
+                    <TikTokIcon className="size-4" />
+                  )}
+                </span>
+                {post.video ? (
+                  <span className="absolute bottom-3 right-3 flex size-9 items-center justify-center rounded-full bg-white text-tar-road transition-transform group-hover:scale-110">
+                    <Play className="size-4 fill-current" />
+                  </span>
+                ) : null}
+              </a>
+            </BlurFade>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+function FollowLinks() {
+  const { instagram, tiktok } = siteConfig;
+  return (
+    <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
+      {[
+        { icon: <InstagramIcon className="size-4" />, handle: instagram.handle, href: instagram.href, network: "Instagram" },
+        { icon: <TikTokIcon className="size-4" />, handle: tiktok.handle, href: tiktok.href, network: "TikTok" },
+      ].map((l) => (
+        <a
+          key={l.network}
+          href={l.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 text-sm tracking-label text-muted-foreground transition-colors hover:text-foreground"
+        >
+          {l.icon}
+          {l.network} {l.handle}
+          <ArrowUpRight className="size-3.5" />
+        </a>
+      ))}
+    </div>
+  );
+}
+
 export function Social() {
   const { instagram, tiktok } = siteConfig;
+  const curated = socialPosts.length > 0;
 
   return (
     <section id="social" className="border-b border-border/60">
@@ -80,6 +159,12 @@ export function Social() {
           description="Real sessions, real members — straight from our Instagram and TikTok. Follow along and tag us when you train."
         />
 
+        {curated ? (
+          <>
+            <Tiles />
+            <FollowLinks />
+          </>
+        ) : (
         <div className="mt-16 grid gap-5 lg:grid-cols-2">
           <BlurFade delay={0.12} inView>
             <Feed
@@ -87,6 +172,7 @@ export function Social() {
               network="Instagram"
               handle={instagram.handle}
               href={instagram.href}
+              frameClassName="h-[400px]"
             >
               <iframe
                 src={`https://www.instagram.com/${instagram.username}/embed/`}
@@ -104,6 +190,7 @@ export function Social() {
               network="TikTok"
               handle={tiktok.handle}
               href={tiktok.href}
+              frameClassName="h-[430px]"
             >
               {/* TikTok's creator embed: embed.js swaps this blockquote for an iframe. */}
               <blockquote
@@ -130,6 +217,7 @@ export function Social() {
             </Feed>
           </BlurFade>
         </div>
+        )}
       </div>
     </section>
   );

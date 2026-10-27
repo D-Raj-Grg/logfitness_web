@@ -63,6 +63,8 @@ src/lib/
   utils.ts                    # cn() helper
   site.ts                     # single source of truth for contact + social details
   pricing.ts                  # the official rate card (memberships, fees, PT)
+  social-posts.ts             # curated 9:16 Instagram/TikTok tiles (images in
+                              #   public/images/social/); empty → live profile embeds
 components.json               # shadcn config
 ```
 
