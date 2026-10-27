@@ -62,10 +62,12 @@ export const siteConfig = {
 
   // Social
   instagram: {
+    username: "logfitnesshtd",
     handle: "@logfitnesshtd",
     href: "https://instagram.com/logfitnesshtd",
   },
   tiktok: {
+    username: "logfitnesshtd",
     handle: "@logfitnesshtd",
     href: "https://www.tiktok.com/@logfitnesshtd",
   },

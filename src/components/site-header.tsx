@@ -13,6 +13,7 @@ const nav = [
   { label: "Supplements", href: "#shop" },
   { label: "Membership", href: "#membership" },
   { label: "Pricing", href: "#pricing" },
+  { label: "Social", href: "#social" },
   { label: "Contact", href: "#contact" },
 ];
 
