@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, Phone, Ticket } from "lucide-react";
+import { ArrowRight, Phone, Ticket } from "lucide-react";
 
 import { SectionHeading } from "@/components/section-heading";
 import { BlurFade } from "@/components/magicui/blur-fade";
@@ -63,6 +63,17 @@ function PlanTable({ caption, plans }: { caption: string; plans: Plan[] }) {
             </th>
             <td className="px-4 py-4 align-top sm:px-6">
               <span className="whitespace-nowrap font-mono text-sm sm:text-base">{formatPrice(plan.total)}</span>
+              {plan.original ? (
+                <span
+                  className={cn(
+                    "mt-0.5 block whitespace-nowrap text-xs line-through",
+                    plan.best ? "text-background/60" : "text-muted-foreground/70"
+                  )}
+                >
+                  <span className="sr-only">Was </span>
+                  {formatPrice(plan.original)}
+                </span>
+              ) : null}
               {plan.perMonth ? (
                 <span
                   className={cn(
@@ -171,7 +182,7 @@ export function Pricing() {
         <SectionHeading
           eyebrow="Official rate card"
           title="Straight prices, no surprises"
-          description="Pay by the day, the month or the year. Longer plans cost less per month, skip the registration fee and add free months — the annual plan gives you four."
+          description="Pay by the month or commit for longer. The longer the plan, the less you pay per month — up to 30% off on the annual plan."
         />
 
         {/* Membership tiers */}
@@ -179,38 +190,32 @@ export function Pricing() {
           {membershipTiers.map((tier, i) => (
             <BlurFade key={tier.id} delay={0.12 + i * 0.1} inView>
               <RateCard no={`0${i + 1}`} name={tier.name} summary={tier.summary}>
-                <div className="flex items-center justify-between gap-4 border-b border-border/60 px-6 py-4">
-                  <span className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Ticket className="size-4 text-foreground" />
-                    Daily pass
-                  </span>
-                  <span className="font-mono text-base text-foreground">
-                    {formatPrice(tier.dailyPass)}
-                  </span>
-                </div>
+                {tier.dailyPass ? (
+                  <div className="flex items-center justify-between gap-4 border-b border-border/60 px-6 py-4">
+                    <span className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Ticket className="size-4 text-foreground" />
+                      Daily pass
+                    </span>
+                    <span className="font-mono text-base text-foreground">
+                      {formatPrice(tier.dailyPass)}
+                    </span>
+                  </div>
+                ) : null}
                 <PlanTable caption={`${tier.name} membership plans`} plans={tier.plans} />
               </RateCard>
             </BlurFade>
           ))}
         </div>
 
-        {/* Registration & fees */}
+        {/* Admission & card fees */}
         <BlurFade delay={0.2} inView>
-          <div className="mt-5 grid gap-px overflow-hidden rounded-xl border border-border/60 bg-border/60 sm:grid-cols-3">
+          <div className="mt-5 grid gap-px overflow-hidden rounded-xl border border-border/60 bg-border/60 sm:grid-cols-2">
             {fees.map((fee) => (
               <div key={fee.label} className="flex flex-col gap-2 bg-card/60 p-6">
                 <p className="text-xs tracking-label text-muted-foreground">
                   {fee.label}
                 </p>
-                <p
-                  className={cn(
-                    "font-mono text-2xl text-foreground",
-                    fee.waived && "flex items-center gap-2"
-                  )}
-                >
-                  {fee.waived ? <BadgeCheck className="size-5" /> : null}
-                  {fee.amount}
-                </p>
+                <p className="font-mono text-2xl text-foreground">{fee.amount}</p>
                 <p className="text-sm text-muted-foreground">{fee.note}</p>
               </div>
             ))}
@@ -259,8 +264,8 @@ export function Pricing() {
                 Join today. The journey starts now.
               </p>
               <p className="text-sm text-white/60">
-                All prices in Nepali rupees (NPR). Card fee included in every
-                3, 6 and 12-month plan.
+                All prices in Nepali rupees (NPR). Admission and card fees are
+                paid once, when you join.
               </p>
             </div>
             <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">

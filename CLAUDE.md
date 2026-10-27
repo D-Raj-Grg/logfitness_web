@@ -39,6 +39,7 @@ npm run lint    # eslint — keep this clean before committing
 
 ```
 public/brand/                 # the two brand PDFs (served + linked from the site)
+public/images/social/         # Instagram / TikTok profile screenshots (Social section)
 src/app/
   layout.tsx                  # fonts (Inter / Anton / JetBrains Mono), metadata, <html class="dark">
   page.tsx                    # composes the landing sections + JSON-LD

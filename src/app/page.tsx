@@ -8,6 +8,7 @@ import { Shop } from "@/components/sections/shop";
 import { Membership } from "@/components/sections/membership";
 import { Pricing } from "@/components/sections/pricing";
 import { Reviews } from "@/components/sections/reviews";
+import { Social } from "@/components/sections/social";
 import { Contact } from "@/components/sections/contact";
 import { CTA } from "@/components/sections/cta";
 
@@ -24,6 +25,7 @@ export default function Home() {
         <Membership />
         <Pricing />
         <Reviews />
+        <Social />
         <Contact />
         <CTA />
       </main>

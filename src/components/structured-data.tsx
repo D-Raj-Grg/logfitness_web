@@ -70,7 +70,9 @@ export function StructuredData() {
         "@type": "OfferCatalog",
         name: "Membership",
         itemListElement: membershipTiers.flatMap((tier) => [
-          offer(`${tier.name} — Daily pass`, tier.dailyPass),
+          ...(tier.dailyPass
+            ? [offer(`${tier.name} — Daily pass`, tier.dailyPass)]
+            : []),
           ...tier.plans.map((plan) =>
             offer(`${tier.name} — ${plan.term}`, plan.total)
           ),

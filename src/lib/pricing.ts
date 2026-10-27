@@ -12,13 +12,15 @@ export const currency = {
 export type Plan = {
   /** Length of the plan, e.g. "3 Months". */
   term: string;
-  /** Total paid up front. */
+  /** Total paid up front (after any discount). */
   total: number;
+  /** Undiscounted price (the month-to-month rate × months), shown struck through. */
+  original?: number;
   /** Approximate effective monthly rate for multi-month plans. */
   perMonth?: number;
-  /** Saving vs. paying month-to-month, e.g. "Save 20%". */
+  /** Saving vs. paying month-to-month, e.g. "20% off". */
   save?: string;
-  /** Extra line under the saving, e.g. "4 months free". */
+  /** Extra line under the saving, e.g. "Best for beginners". */
   note?: string;
   /** Highlight as the best-value plan. */
   best?: boolean;
@@ -28,44 +30,68 @@ export type MembershipTier = {
   id: string;
   name: string;
   summary: string;
-  dailyPass: number;
+  /** Walk-in day rate — omit when the rate card doesn't list one. */
+  dailyPass?: number;
   plans: Plan[];
 };
 
 export const membershipTiers: MembershipTier[] = [
   {
     id: "gym",
-    name: "Gym Only",
-    summary: "Full access to the strength floor — free weights, racks and machines.",
-    dailyPass: 200,
+    name: "Gym",
+    summary: "Build. Strength. Confidence. Full access to the strength floor.",
     plans: [
-      { term: "1 Month", total: 2000 },
-      { term: "3 Months", total: 5400, perMonth: 1800, save: "Save 10%" },
-      { term: "6 Months", total: 9600, perMonth: 1600, save: "Save 20%" },
+      { term: "1 Month", total: 2200 },
+      {
+        term: "3 Months",
+        total: 5808,
+        original: 6600,
+        perMonth: 1936,
+        save: "12% off",
+      },
+      {
+        term: "6 Months",
+        total: 10560,
+        original: 13200,
+        perMonth: 1760,
+        save: "20% off",
+      },
       {
         term: "12 Months",
-        total: 16000,
-        perMonth: 1333,
-        save: "Save 33%",
-        note: "4 months free",
+        total: 18480,
+        original: 26400,
+        perMonth: 1540,
+        save: "30% off",
       },
     ],
   },
   {
     id: "gym-cardio",
     name: "Gym + Cardio",
-    summary: "Everything in Gym Only, plus the cardio and conditioning zone.",
-    dailyPass: 250,
+    summary:
+      "Build muscle. Burn calories. Stay fit. The strength floor plus the cardio zone.",
     plans: [
-      { term: "1 Month", total: 2500 },
-      { term: "3 Months", total: 6600, perMonth: 2200, save: "Save 12%" },
-      { term: "6 Months", total: 12000, perMonth: 2000, save: "Save 20%" },
+      { term: "1 Month", total: 3000 },
+      {
+        term: "3 Months",
+        total: 7650,
+        original: 9000,
+        perMonth: 2550,
+        save: "15% off",
+      },
+      {
+        term: "6 Months",
+        total: 14400,
+        original: 18000,
+        perMonth: 2400,
+        save: "20% off",
+      },
       {
         term: "12 Months",
-        total: 20000,
-        perMonth: 1667,
-        save: "Save 33%",
-        note: "4 months free",
+        total: 25200,
+        original: 36000,
+        perMonth: 2100,
+        save: "30% off",
         best: true,
       },
     ],
@@ -76,25 +102,18 @@ export type Fee = {
   label: string;
   amount: string;
   note: string;
-  waived?: boolean;
 };
 
 export const fees: Fee[] = [
   {
-    label: "Registration & card fee",
+    label: "Admission fee",
     amount: "Rs 500",
-    note: "Paid on day one with a 1-month plan",
+    note: "One-time, when you join",
   },
   {
-    label: "3, 6 & 12-month plans",
-    amount: "Free",
-    note: "Registration and card fee waived",
-    waived: true,
-  },
-  {
-    label: "Lost card replacement",
-    amount: "Rs 300 – 500",
-    note: "Standard fee",
+    label: "Card fee",
+    amount: "Rs 200",
+    note: "Your member card",
   },
 ];
 

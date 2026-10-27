@@ -14,8 +14,8 @@ const perks = [
   "Group classes — Zumba & dance included",
   "Member pricing on protein & supplements",
   "Guidance from trainers on the floor",
-  "Daily, monthly, 6-month & annual plans",
-  "No registration fee on 3-month plans and up",
+  "Monthly, 3-month, 6-month & annual plans",
+  "Save up to 30% on the annual plan",
 ];
 
 export function Membership() {
@@ -27,7 +27,7 @@ export function Membership() {
             <SectionHeading
               eyebrow="Membership"
               title="Pick a plan, own the floor"
-              description="Two simple tiers, no hidden extras. Start with a day pass or a month, and the longer you commit the less you pay — the annual plan comes with four months free. Walk in for a tour or call to get started today."
+              description="Two simple tiers, no hidden extras. Start with a month, and the longer you commit the less you pay — up to 30% off on the annual plan. Walk in for a tour or call to get started today."
             />
 
             <ul className="mt-10 grid gap-x-6 gap-y-3 sm:grid-cols-2">
