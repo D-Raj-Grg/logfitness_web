@@ -6,7 +6,6 @@ import { SiteFooter } from "@/components/site-footer";
 import { BalanceLookup } from "@/components/balance-lookup";
 import { LogMark } from "@/components/log-mark";
 import { DotPattern } from "@/components/magicui/dot-pattern";
-import { formatCardNo, parseCardNo } from "@/lib/balance";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -28,8 +27,9 @@ export default async function BalancePage({
 }) {
   const raw = (await searchParams).card_no;
   const text = Array.isArray(raw) ? raw[0] : raw;
-  const parsed = text ? parseCardNo(text) : null;
-  const initialCardNo = parsed === null ? undefined : formatCardNo(parsed);
+  // Pass the raw value through (trimmed, capped) rather than dropping it when
+  // it doesn't parse — the component prefills the digits and shows the hint.
+  const initialCardNo = text?.trim().slice(0, 32) || undefined;
 
   return (
     <>
@@ -72,7 +72,10 @@ export default async function BalancePage({
         </section>
 
         <section className="mx-auto max-w-3xl px-5 py-16 sm:px-8 sm:py-20">
-          <BalanceLookup initialCardNo={initialCardNo} />
+          <BalanceLookup
+            key={initialCardNo ?? "manual"}
+            initialCardNo={initialCardNo}
+          />
         </section>
       </main>
 

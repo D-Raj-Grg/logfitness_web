@@ -26,7 +26,7 @@ type LookupState =
   | { kind: "ok"; cardNo: number; data: BalanceOk }
   | { kind: "card_not_found"; cardNo: number }
   | { kind: "card_unassigned"; cardNo: number }
-  | { kind: "error"; cardNo: number; message: string };
+  | { kind: "error"; cardNo: number; message: string; retry: boolean };
 
 type RenewalState =
   | { kind: "idle" }
@@ -37,16 +37,42 @@ type RenewalState =
 
 const GENERIC_ERROR =
   "Something went wrong on our side. Try again in a moment, or ask at the front desk.";
+const OFFLINE_ERROR =
+  "Couldn't reach the server. Check your connection and try again.";
+const RATE_LIMIT_ERROR = "Too many attempts — wait a minute and try again.";
+/** Misconfigured env or unknown org — nothing the member can do about it. */
+const NOT_SET_UP_ERROR =
+  "This page isn't set up yet — please ask the front desk.";
+const INPUT_HINT = "Enter the number printed on your card, e.g. 0004.";
+
+/** Maps a thrown error to copy + whether a "try again" makes sense. */
+function describeError(err: unknown): { message: string; retry: boolean } {
+  if (err instanceof BalanceApiError) {
+    if (err.status === 429) return { message: RATE_LIMIT_ERROR, retry: false };
+    if (err.status === null) return { message: OFFLINE_ERROR, retry: true };
+    return { message: GENERIC_ERROR, retry: true };
+  }
+  // A plain Error here is the "env not configured" throw from the client.
+  return { message: NOT_SET_UP_ERROR, retry: false };
+}
 
 export function BalanceLookup({ initialCardNo }: { initialCardNo?: string }) {
+  // `initialCardNo` is whatever came in on ?card_no= — possibly not a valid
+  // number. Prefill the digits either way so the member sees what was read.
   const initialNo = initialCardNo ? parseCardNo(initialCardNo) : null;
-  const [text, setText] = useState(initialCardNo ?? "");
+  const [text, setText] = useState(() =>
+    initialNo !== null
+      ? formatCardNo(initialNo)
+      : (initialCardNo ?? "").replace(/\D/g, "")
+  );
   // Arriving from the QR (?card_no=…) starts in `loading`, so the first paint
   // already shows the skeleton and the mount effect only has to fetch.
   const [state, setState] = useState<LookupState>(() =>
     initialNo === null ? { kind: "idle" } : { kind: "loading", cardNo: initialNo }
   );
-  const [inputError, setInputError] = useState<string | null>(null);
+  const [inputError, setInputError] = useState<string | null>(() =>
+    initialCardNo && initialNo === null ? INPUT_HINT : null
+  );
   // Guards against a slow earlier lookup overwriting a newer one.
   const requestId = useRef(0);
 
@@ -62,11 +88,7 @@ export function BalanceLookup({ initialCardNo }: { initialCardNo?: string }) {
       response = await fetchBalance(cardNo);
     } catch (err) {
       if (id !== requestId.current) return;
-      const message =
-        err instanceof BalanceApiError && err.status === null
-          ? "Couldn't reach the server. Check your connection and try again."
-          : GENERIC_ERROR;
-      setState({ kind: "error", cardNo, message });
+      setState({ kind: "error", cardNo, ...describeError(err) });
       return;
     }
     if (id !== requestId.current) return;
@@ -82,8 +104,21 @@ export function BalanceLookup({ initialCardNo }: { initialCardNo?: string }) {
         setState({ kind: "card_unassigned", cardNo });
         break;
       case "org_not_found":
-        setState({ kind: "error", cardNo, message: GENERIC_ERROR });
+        setState({
+          kind: "error",
+          cardNo,
+          message: NOT_SET_UP_ERROR,
+          retry: false,
+        });
         break;
+      default:
+        // An unknown result must never leave the skeleton spinning.
+        setState({
+          kind: "error",
+          cardNo,
+          message: GENERIC_ERROR,
+          retry: true,
+        });
     }
   }
 
@@ -100,7 +135,7 @@ export function BalanceLookup({ initialCardNo }: { initialCardNo?: string }) {
     e.preventDefault();
     const n = parseCardNo(text);
     if (n === null) {
-      setInputError("Enter the number printed on your card, e.g. 0004.");
+      setInputError(INPUT_HINT);
       return;
     }
     setText(formatCardNo(n));
@@ -144,17 +179,23 @@ export function BalanceLookup({ initialCardNo }: { initialCardNo?: string }) {
             <Button type="submit" size="lg" disabled={busy}>
               {busy ? (
                 <>
-                  <Loader2 className="size-4 animate-spin" /> Checking
+                  <Loader2 className="size-4 animate-spin" aria-hidden="true" />{" "}
+                  Checking
                 </>
               ) : (
                 <>
-                  <Search className="size-4" /> Check balance
+                  <Search className="size-4" aria-hidden="true" /> Check
+                  balance
                 </>
               )}
             </Button>
           </div>
           {inputError ? (
-            <p id="card-no-error" className="text-sm text-foreground">
+            <p
+              id="card-no-error"
+              role="alert"
+              className="text-sm text-foreground"
+            >
               {inputError}
             </p>
           ) : (
@@ -168,7 +209,11 @@ export function BalanceLookup({ initialCardNo }: { initialCardNo?: string }) {
 
       {/* 02. Balance */}
       <Step index="02" title="Your balance" muted={state.kind === "idle"}>
-        <Result state={state} onRetry={lookup} />
+        {/* The live region is this persistent wrapper, so the result that
+            replaces the skeleton is announced. */}
+        <div aria-live="polite">
+          <Result state={state} onRetry={lookup} />
+        </div>
       </Step>
 
       {/* 03. Renewal */}
@@ -198,7 +243,7 @@ function Result({
     case "loading":
       return (
         <Panel cardNo={state.cardNo}>
-          <div className="mt-4 space-y-3" aria-busy="true" aria-live="polite">
+          <div className="mt-4 space-y-3" aria-busy="true">
             <div className="h-7 w-48 animate-pulse rounded bg-secondary" />
             <div className="h-4 w-32 animate-pulse rounded bg-secondary" />
             <div className="h-10 w-40 animate-pulse rounded bg-secondary" />
@@ -241,15 +286,19 @@ function Result({
           <p className="mt-4 text-base leading-relaxed text-foreground">
             {state.message}
           </p>
-          <div className="mt-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onRetry(state.cardNo)}
-            >
-              Try again
-            </Button>
-          </div>
+          {state.retry ? (
+            <div className="mt-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onRetry(state.cardNo)}
+              >
+                Try again
+              </Button>
+            </div>
+          ) : (
+            <FrontDeskLinks />
+          )}
         </Panel>
       );
   }
@@ -293,32 +342,39 @@ function BalanceCard({ cardNo, data }: { cardNo: number; data: BalanceOk }) {
   );
 }
 
-/** Headline copy for the balance card — one line, no third colour. */
+/**
+ * Headline copy for the balance card — one line, no third colour.
+ *
+ * Branches on `status` first. `days_left` is always end date − today (never
+ * days until a start), so only active/expiring memberships show the count.
+ */
 function describeDays(data: BalanceOk): { text: string; big: boolean } {
   const d = data.days_left;
-  if (d === null) {
-    switch (data.status) {
-      case "none":
-        return { text: "No membership on this card", big: false };
-      case "left":
-        return { text: "Membership closed", big: false };
-      case "frozen":
-        return { text: "Membership frozen", big: false };
-      case "upcoming":
-        return { text: "Membership starts soon", big: false };
-      default:
-        return { text: "No end date", big: false };
-    }
+  const days = (n: number) => `${n} ${n === 1 ? "day" : "days"}`;
+
+  switch (data.status) {
+    case "active":
+    case "expiring":
+      if (d === null) return { text: "No end date", big: false };
+      if (d < 0) return { text: `Expired ${days(-d)} ago`, big: false };
+      if (d === 0) return { text: "Last day today", big: true };
+      return { text: `${days(d)} left`, big: true };
+    case "expired":
+      // Negative days → ran out of time; otherwise the sessions were used up.
+      if (d !== null && d < 0) {
+        return { text: `Expired ${days(-d)} ago`, big: false };
+      }
+      return { text: "Membership expired", big: false };
+    case "upcoming":
+      return { text: "Membership starts soon", big: false };
+    case "frozen":
+      return { text: "Membership frozen", big: false };
+    case "left":
+      return { text: "Membership closed", big: false };
+    case "none":
+    default:
+      return { text: "No membership on this card", big: false };
   }
-  if (d < 0) {
-    const n = Math.abs(d);
-    return { text: `Expired ${n} ${n === 1 ? "day" : "days"} ago`, big: false };
-  }
-  if (d === 0) return { text: "Last day today", big: true };
-  if (data.status === "upcoming") {
-    return { text: `Starts in ${d} ${d === 1 ? "day" : "days"}`, big: true };
-  }
-  return { text: `${d} ${d === 1 ? "day" : "days"} left`, big: true };
 }
 
 const statusLabel: Record<MembershipStatus, string> = {
@@ -364,7 +420,7 @@ function Renewal({ cardNo, data }: { cardNo: number; data: BalanceOk }) {
     return (
       <div className="rounded-xl border border-border/60 bg-card/60 p-5">
         <p className="flex items-center gap-2 text-base text-foreground">
-          <Check className="size-4" />
+          <Check className="size-4" aria-hidden="true" />
           {state.kind === "sent"
             ? "Thanks — the front desk will call you."
             : "Renewal already requested"}
@@ -383,6 +439,7 @@ function Renewal({ cardNo, data }: { cardNo: number; data: BalanceOk }) {
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (sending) return;
     setState({ kind: "sending" });
     try {
       const res = await requestRenewal(cardNo, { phone, note });
@@ -402,17 +459,14 @@ function Renewal({ cardNo, data }: { cardNo: number; data: BalanceOk }) {
           });
           break;
         case "org_not_found":
-          setState({ kind: "error", message: GENERIC_ERROR });
+          setState({ kind: "error", message: NOT_SET_UP_ERROR });
           break;
+        default:
+          // Unknown result: surface an error so the button is usable again.
+          setState({ kind: "error", message: GENERIC_ERROR });
       }
     } catch (err) {
-      setState({
-        kind: "error",
-        message:
-          err instanceof BalanceApiError && err.status === null
-            ? "Couldn't reach the server. Check your connection and try again."
-            : GENERIC_ERROR,
-      });
+      setState({ kind: "error", message: describeError(err).message });
     }
   }
 
@@ -460,7 +514,8 @@ function Renewal({ cardNo, data }: { cardNo: number; data: BalanceOk }) {
         <Button type="submit" size="lg" disabled={sending}>
           {sending ? (
             <>
-              <Loader2 className="size-4 animate-spin" /> Sending
+              <Loader2 className="size-4 animate-spin" aria-hidden="true" />{" "}
+              Sending
             </>
           ) : (
             "Request renewal"

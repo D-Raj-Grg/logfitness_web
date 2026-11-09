@@ -20,13 +20,24 @@
 const API_URL = process.env.NEXT_PUBLIC_BALANCE_API;
 const ORG_SLUG = process.env.NEXT_PUBLIC_ORG_SLUG;
 
+const ENV_ERROR =
+  "Balance API is not configured: set NEXT_PUBLIC_BALANCE_API and NEXT_PUBLIC_ORG_SLUG (see .env.example).";
+
 function requireEnv(): { api: string; org: string } {
   if (!API_URL || !ORG_SLUG) {
-    throw new Error(
-      "Balance API is not configured: set NEXT_PUBLIC_BALANCE_API and NEXT_PUBLIC_ORG_SLUG (see .env.example)."
-    );
+    console.error(ENV_ERROR);
+    throw new Error(ENV_ERROR);
   }
   return { api: API_URL.replace(/\/+$/, ""), org: ORG_SLUG };
+}
+
+/** An unknown org slug is a deployment mistake, not a member mistake — log it. */
+function logIfOrgNotFound(body: { result: string }, org: string) {
+  if (body.result === "org_not_found") {
+    console.error(
+      `Balance API: org "${org}" not found — check NEXT_PUBLIC_ORG_SLUG.`
+    );
+  }
 }
 
 /** Numbers printed on cards run 0001–9999. */
@@ -141,7 +152,10 @@ export async function fetchBalance(cardNo: number): Promise<BalanceResponse> {
   }
 
   const body = await readJson(res);
-  if (res.ok && isResult(body)) return body as BalanceResponse;
+  if (res.ok && isResult(body)) {
+    logIfOrgNotFound(body, org);
+    return body as BalanceResponse;
+  }
   throw new BalanceApiError(
     `Balance lookup failed (${res.status}).`,
     res.status
@@ -188,6 +202,7 @@ export async function requestRenewal(
   const body = await readJson(res);
   // 429 carries a proper result body ("too_soon"); treat it like a 200.
   if ((res.ok || res.status === 429) && isResult(body)) {
+    logIfOrgNotFound(body, org);
     return body as RenewalResponse;
   }
   throw new BalanceApiError(
