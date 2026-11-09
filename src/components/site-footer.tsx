@@ -52,6 +52,18 @@ export function SiteFooter() {
               >
                 Leave a Google review
               </Link>
+              <Link
+                href="/privacy"
+                className="text-xs text-muted-foreground/70 underline-offset-4 transition-colors hover:text-foreground hover:underline"
+              >
+                Privacy
+              </Link>
+              <Link
+                href="/support"
+                className="text-xs text-muted-foreground/70 underline-offset-4 transition-colors hover:text-foreground hover:underline"
+              >
+                Support
+              </Link>
               {brandKit.map((doc) => (
                 <a
                   key={doc.href}
