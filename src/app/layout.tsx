@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Anton, JetBrains_Mono } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
+import { SiteAnalytics } from "@/components/site-analytics";
 
 import { Grain } from "@/components/textures";
 import { siteConfig } from "@/lib/site";
@@ -118,7 +118,7 @@ export default function RootLayout({
         </a>
         {children}
         <Grain />
-        <Analytics />
+        <SiteAnalytics />
       </body>
     </html>
   );
