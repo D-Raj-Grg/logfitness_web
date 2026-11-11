@@ -29,21 +29,21 @@ export function Hero() {
       {/* Spotlight glow — a monochrome ground light, not a brand colour */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/3 -z-0 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/[0.06] blur-[120px]"
+        className="pointer-events-none absolute left-1/2 top-1/3 -z-0 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground/[0.06] blur-[120px]"
       />
 
       {/* Giant plates racked at the edges */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-56 top-1/2 size-[480px] -translate-y-1/2 rounded-full border-[46px] border-white/[0.04] sm:-left-44 sm:size-[560px]"
+        className="pointer-events-none absolute -left-56 top-1/2 size-[480px] -translate-y-1/2 rounded-full border-[46px] border-foreground/[0.04] sm:-left-44 sm:size-[560px]"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-64 -right-48 size-[520px] rounded-full border-[46px] border-white/[0.04] sm:-right-32"
+        className="pointer-events-none absolute -bottom-64 -right-48 size-[520px] rounded-full border-[46px] border-foreground/[0.04] sm:-right-32"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_120%_at_50%_0%,transparent_55%,var(--tar-road)_100%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_120%_at_50%_0%,transparent_55%,var(--background)_100%)]"
       />
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-5 py-24 sm:px-8">

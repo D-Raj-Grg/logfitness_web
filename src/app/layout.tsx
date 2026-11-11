@@ -98,6 +98,13 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Runs before first paint so a visitor who chose light mode never sees a dark
+ * flash. Dark is the default: only an explicit "light" in localStorage turns
+ * the `dark` class off. The theme-color meta (browser chrome) follows.
+ */
+const themeScript = `(function(){try{var d=localStorage.getItem("theme")!=="light";var r=document.documentElement;r.classList.toggle("dark",d);r.style.colorScheme=d?"dark":"light";var c=d?"#17181D":"#FFFFFF";var s=function(){var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",c)};s();document.addEventListener("DOMContentLoaded",s)}catch(e){}})();`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -109,6 +116,9 @@ export default function RootLayout({
       className={`dark ${inter.variable} ${anton.variable} ${jetbrainsMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <a
           href="#main"

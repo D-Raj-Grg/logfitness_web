@@ -20,7 +20,52 @@
   --elegant-grey: #8b9096;
   --white: #ffffff;
 
-  /* shadcn tokens — dark-first, because white-on-Tar-Road is the master pairing */
+  /*
+    shadcn tokens, LIGHT: white is the ground, Tar Road is the ink. The grey
+    accent is too pale for small text on white, so muted text uses a deeper
+    grey of the same hue.
+  */
+  --background: #ffffff;
+  --foreground: #17181d;
+
+  --card: #f6f7f8;
+  --card-foreground: #17181d;
+
+  --popover: #ffffff;
+  --popover-foreground: #17181d;
+
+  --primary: #17181d;
+  --primary-foreground: #f4f5f6;
+
+  --secondary: #eef0f2;
+  --secondary-foreground: #17181d;
+
+  --muted: #eef0f2;
+  --muted-foreground: #5c6168;
+
+  --accent: #e8eaed;
+  --accent-foreground: #17181d;
+
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+
+  --border: #dfe1e5;
+  --input: #dfe1e5;
+  --ring: #8b9096;
+
+  /* A faint band behind a section (ticker, shop) */
+  --band: #f3f4f6;
+
+  color-scheme: light;
+}
+
+/*
+  DARK is the default (<html class="dark">): white-on-Tar-Road is the master
+  pairing. The same class is put on the brand's dark panels (hero blocks,
+  footer, plate cards) so they stay dark when the page is in light mode --
+  custom properties cascade, so everything inside re-reads these values.
+*/
+.dark {
   --background: #17181d;
   --foreground: #f4f5f6;
 
@@ -48,6 +93,10 @@
   --border: #2a2d35;
   --input: #2a2d35;
   --ring: #8b9096;
+
+  --band: #1a1b21;
+
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -70,6 +119,7 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-band: var(--band);
 
   --color-tar-road: var(--tar-road);
   --color-tar-road-elevated: var(--tar-road-elevated);

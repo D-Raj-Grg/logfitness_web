@@ -64,7 +64,7 @@ export function Membership() {
 
           {/* Visual panel — the engraved member plate */}
           <BlurFade delay={0.2} inView>
-            <div className="relative flex aspect-square flex-col overflow-hidden rounded-2xl border border-border/60 bg-tar-road p-8 sm:p-10">
+            <div className="relative flex aspect-square flex-col overflow-hidden rounded-2xl border border-border/60 dark bg-tar-road p-8 sm:p-10">
               <DotPattern
                 className={cn(
                   "fill-white/[0.06]",

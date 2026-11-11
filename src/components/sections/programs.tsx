@@ -51,7 +51,7 @@ export function Programs() {
             <BlurFade key={p.kind} delay={0.12 + i * 0.1} inView>
               <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-border/60 bg-card/50 transition-colors hover:border-border hover:bg-card">
                 {/* Emblem window */}
-                <div className="relative flex items-center justify-center overflow-hidden border-b border-border/60 bg-tar-road py-10">
+                <div className="relative flex items-center justify-center overflow-hidden border-b border-border/60 dark bg-tar-road py-10">
                   <DotPattern
                     width={14}
                     height={14}

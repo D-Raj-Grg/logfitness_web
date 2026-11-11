@@ -50,7 +50,7 @@ export function Social() {
           {profiles.map((p, i) => (
             <BlurFade key={p.network} delay={0.12 + i * 0.1} inView>
               <article className="flex h-full flex-col overflow-hidden rounded-xl border border-border/60 bg-card/50">
-                <div className="flex items-center justify-between gap-4 border-b border-border/60 bg-tar-road px-6 py-5">
+                <div className="flex items-center justify-between gap-4 border-b border-border/60 dark bg-tar-road px-6 py-5">
                   <div className="flex items-center gap-3">
                     <span className="flex size-11 items-center justify-center rounded-lg border border-border bg-secondary/50 text-foreground">
                       {p.icon}

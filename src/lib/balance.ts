@@ -7,8 +7,10 @@
  * Members reach the page by scanning the QR printed on their gym card
  * (`/balance?c=0004_k3x9q2mf`). The `c` value is a random per-card token, not
  * the printed number: the number is easy to guess, so on its own it opens
- * nothing and nobody can walk through other members' cards. The API still only
- * returns a masked name.
+ * nothing and nobody can walk through other members' cards. What it returns is
+ * what whoever holds the card may see: first name (the rest as xxxx), the first
+ * five digits of the mobile number (the rest as x), the plan, days left and the
+ * last payment.
  *
  * Env (both public, inlined at build time):
  *   NEXT_PUBLIC_BALANCE_API — base URL of the edge function,
@@ -66,7 +68,14 @@ export type MembershipStatus =
 export interface BalanceOk {
   result: "ok";
   card_no: string;
+  /** Initials with dots ("R•••• T••••"); kept by the API, the page shows `first_name`. */
   name_masked: string;
+  /** The member's first name; null only for an empty name. */
+  first_name: string | null;
+  /** First name with the rest hidden: "Subhadra xxxx" ("Sita" stays "Sita"). */
+  name_display: string | null;
+  /** First five digits of the mobile number, then x's ("98252xxxxx"); null when too short to show. */
+  phone_hint: string | null;
   plan_name: string | null;
   status: MembershipStatus;
   /** Days until the membership ends; negative once it has expired. */
@@ -75,6 +84,12 @@ export interface BalanceOk {
   ends_on: string | null;
   /** True when the member already asked for a renewal that is still open. */
   renewal_pending: boolean;
+  /** ISO date (YYYY-MM-DD) of the last payment not taken back; null when there is none. */
+  last_payment_on: string | null;
+  /** That payment in paisa (integer); null when there is none. */
+  last_payment_paisa: number | null;
+  /** The gym's currency code, e.g. "NPR". */
+  currency: string | null;
 }
 
 export interface CardNotFound {
@@ -202,6 +217,20 @@ export async function requestRenewal(
     `Renewal request failed (${res.status}).`,
     res.status
   );
+}
+
+/**
+ * Paisa → "Rs 2,500" (or "Rs 2,499.50"). Grouped the South Asian way, and NPR
+ * is written "Rs" as on the rate card; any other currency shows its code.
+ */
+export function formatMoney(paisa: number, currency: string | null): string {
+  const units = paisa / 100;
+  const amount = new Intl.NumberFormat("en-IN", {
+    minimumFractionDigits: Number.isInteger(units) ? 0 : 2,
+    maximumFractionDigits: 2,
+  }).format(units);
+  const symbol = !currency || currency === "NPR" ? "Rs" : currency;
+  return `${symbol} ${amount}`;
 }
 
 /** "2026-11-20" → "20 Nov 2026". Parsed as a plain date, so no timezone drift. */

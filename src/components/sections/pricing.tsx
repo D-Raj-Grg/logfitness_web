@@ -148,7 +148,7 @@ function RateCard({
         className
       )}
     >
-      <div className="relative overflow-hidden border-b border-border/60 bg-tar-road px-6 py-6">
+      <div className="relative overflow-hidden border-b border-border/60 dark bg-tar-road px-6 py-6">
         <DotPattern
           width={14}
           height={14}
@@ -258,7 +258,7 @@ export function Pricing() {
 
         {/* Footnote + CTA */}
         <BlurFade delay={0.25} inView>
-          <div className="mt-12 flex flex-col gap-6 rounded-xl border border-border/60 bg-tar-road p-8 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-12 flex flex-col gap-6 rounded-xl border border-border/60 dark bg-tar-road p-8 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-1">
               <p className="font-display text-2xl text-white">
                 Join today. The journey starts now.

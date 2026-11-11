@@ -8,6 +8,7 @@ import {
   BalanceApiError,
   fetchBalance,
   formatEndsOn,
+  formatMoney,
   requestRenewal,
   RENEWAL_NOTE_MAX,
   RENEWAL_PHONE_MAX,
@@ -233,7 +234,14 @@ function BalanceCard({ data }: { data: BalanceOk }) {
     <Panel cardNo={data.card_no}>
       <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-lg text-foreground">{data.name_masked}</p>
+          <p className="text-lg text-foreground">
+            {data.name_display ?? data.first_name ?? data.name_masked}
+          </p>
+          {data.phone_hint && (
+            <p className="mt-1 font-mono text-sm tracking-wide text-muted-foreground">
+              {data.phone_hint}
+            </p>
+          )}
           {data.plan_name && (
             <p className="mt-1 text-sm text-muted-foreground">
               {data.plan_name}
@@ -258,6 +266,29 @@ function BalanceCard({ data }: { data: BalanceOk }) {
             <span className="font-mono text-foreground">
               {formatEndsOn(data.ends_on)}
             </span>
+          </p>
+        )}
+      </div>
+
+      <div className="mt-6 border-t border-border/60 pt-6">
+        <p className="text-xs tracking-label text-muted-foreground">
+          Last payment
+        </p>
+        {data.last_payment_paisa !== null && data.last_payment_on ? (
+          <p className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-foreground">
+            <span className="font-display text-2xl leading-none">
+              {formatMoney(data.last_payment_paisa, data.currency)}
+            </span>
+            <span className="text-sm text-muted-foreground">
+              on{" "}
+              <span className="font-mono text-foreground">
+                {formatEndsOn(data.last_payment_on)}
+              </span>
+            </span>
+          </p>
+        ) : (
+          <p className="mt-2 text-sm text-muted-foreground">
+            No payment on record yet.
           </p>
         )}
       </div>

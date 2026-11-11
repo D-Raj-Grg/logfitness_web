@@ -45,7 +45,7 @@ function ProductCard({ item, accent }: { item: Product; accent: boolean }) {
 
 export function Shop() {
   return (
-    <section id="shop" className="border-b border-border/60 bg-tar-road-elevated/30">
+    <section id="shop" className="border-b border-border/60 bg-band">
       <div className="mx-auto max-w-6xl px-5 pt-24 sm:px-8">
         <SectionHeading
           eyebrow="The supplement bar"
@@ -81,8 +81,8 @@ export function Shop() {
           ))}
         </Marquee>
 
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-linear-to-r from-tar-road-elevated/30 to-transparent sm:w-40" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-linear-to-l from-tar-road-elevated/30 to-transparent sm:w-40" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-linear-to-r from-band to-transparent sm:w-40" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-linear-to-l from-band to-transparent sm:w-40" />
       </div>
     </section>
   );

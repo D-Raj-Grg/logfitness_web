@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 
 import { LogMark } from "@/components/log-mark";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const nav = [
@@ -56,6 +57,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <Button
             asChild
             size="sm"

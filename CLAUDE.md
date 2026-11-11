@@ -101,8 +101,18 @@ Brand tokens live in `:root` in `globals.css` and are exposed to Tailwind via
 
 ## Conventions
 
-- The site is **dark by default** (`<html class="dark">`); the palette is
-  authored dark-first because white-on-Tar-Road is the master lockup.
+- The site is **dark by default** (`<html class="dark">`) with a **light mode**
+  a visitor can switch to (`ThemeToggle` in the headers; the choice is kept in
+  `localStorage` key `theme`, and an inline script in `layout.tsx` applies it
+  before first paint so there is no flash). Tokens: `:root` holds the LIGHT
+  values (white ground, Tar Road ink, a deeper grey for muted text) and `.dark`
+  the dark ones -- always use the semantic tokens (`bg-background`,
+  `text-foreground`, `text-muted-foreground`, `border-border`, `bg-band`), never
+  `white`/`black` for page surfaces. The brand's dark panels (`bg-tar-road` hero
+  blocks, footer, plate cards) also carry the `dark` class so they stay dark in
+  light mode -- custom properties cascade, so everything inside re-reads the dark
+  tokens. Do not put `ThemeToggle` inside such a panel (its CSS-driven icons key
+  off the nearest `.dark`).
 - Section components are server components; anything using `motion` (Magic UI)
   is a `"use client"` component. Keep that split.
 - shadcn/Magic UI CLIs reach `ui.shadcn.com` / `magicui.design`, which are
@@ -134,8 +144,10 @@ Brand tokens live in `:root` in `globals.css` and are exposed to Tailwind via
   token (card number + `_` + 8 random chars), **not** the printed number: the
   number is easy to guess, so there is deliberately no "type your card number"
   box and a missing/mangled/old `?card_no=` link just asks the member to scan
-  their card again (no API call). The page shows days left on
-  the membership and lets them *request* a renewal (no payment). It talks to
+  their card again (no API call). The page shows the member's first name (the
+  rest of the name as `xxxx`), the first five digits of their mobile number (then `xxxxx`), the plan, days left
+  and the **last payment** (date + amount, `formatMoney`), and lets them
+  *request* a renewal (no payment). It talks to
   a Supabase edge function over plain `fetch` — **the only network call on the
   site** — configured by `NEXT_PUBLIC_BALANCE_API` (function base URL) and
   `NEXT_PUBLIC_ORG_SLUG` (see `.env.example`). Do not add a Supabase client
