@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { BalanceLookup } from "@/components/balance-lookup";
 import { LogMark } from "@/components/log-mark";
 import { DotPattern } from "@/components/magicui/dot-pattern";
+import { parseCardToken } from "@/lib/balance";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -25,11 +26,11 @@ export default async function BalancePage({
 }: {
   searchParams: SearchParams;
 }) {
-  const raw = (await searchParams).card_no;
+  const raw = (await searchParams).c;
   const text = Array.isArray(raw) ? raw[0] : raw;
-  // Pass the raw value through (trimmed, capped) rather than dropping it when
-  // it doesn't parse — the component prefills the digits and shows the hint.
-  const initialCardNo = text?.trim().slice(0, 32) || undefined;
+  // The QR's random card token. Missing, mangled, or an old ?card_no= link all
+  // come out null and the page asks the member to scan their card again.
+  const token = parseCardToken(text);
 
   return (
     <>
@@ -64,18 +65,15 @@ export default async function BalancePage({
               Membership balance
             </h1>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground">
-              See how many days are left on your membership and, when
-              it&apos;s time, ask the front desk to renew it. Nothing is paid
-              here — we just give you a call.
+              Scan the QR on your card to see how many days are left on your
+              membership and, when it&apos;s time, ask the front desk to renew
+              it. Nothing is paid here — we just give you a call.
             </p>
           </div>
         </section>
 
         <section className="mx-auto max-w-3xl px-5 py-16 sm:px-8 sm:py-20">
-          <BalanceLookup
-            key={initialCardNo ?? "manual"}
-            initialCardNo={initialCardNo}
-          />
+          <BalanceLookup key={token ?? "none"} token={token} />
         </section>
       </main>
 
