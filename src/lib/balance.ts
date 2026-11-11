@@ -5,8 +5,10 @@
  * on purpose — the site has no Supabase dependency and should stay that way.
  *
  * Members reach the page by scanning the QR printed on their gym card
- * (`/balance?card_no=0004`). Anyone can look a card up; the API only ever
- * returns a masked name, so there is nothing sensitive to protect here.
+ * (`/balance?c=0004_k3x9q2mf`). The `c` value is a random per-card token, not
+ * the printed number: the number is easy to guess, so on its own it opens
+ * nothing and nobody can walk through other members' cards. The API still only
+ * returns a masked name.
  *
  * Env (both public, inlined at build time):
  *   NEXT_PUBLIC_BALANCE_API — base URL of the edge function,
@@ -40,24 +42,16 @@ function logIfOrgNotFound(body: { result: string }, org: string) {
   }
 }
 
-/** Numbers printed on cards run 0001–9999. */
-export const CARD_NO_MAX = 9999;
-
 /**
- * Accepts whatever the member typed ("4", "04", "0004", "No. 0004") and
- * returns the card number, or null when it is not a valid card number.
+ * A card's link token: 4-digit card number, "_", 8 random characters
+ * ("0004_k3x9q2mf"). Same shape the API and the database enforce.
  */
-export function parseCardNo(text: string): number | null {
-  const digits = text.replace(/\D/g, "");
-  if (!digits) return null;
-  const n = Number.parseInt(digits, 10);
-  if (!Number.isFinite(n) || n < 1 || n > CARD_NO_MAX) return null;
-  return n;
-}
+const CARD_TOKEN_RE = /^[0-9]{4}_[a-z2-9]{8}$/;
 
-/** 4 → "0004" — the form printed on the card and expected by the API. */
-export function formatCardNo(n: number): string {
-  return String(n).padStart(4, "0");
+/** The token from the link, or null when it cannot be one (missing, mangled, an old `?card_no=` link). */
+export function parseCardToken(text: string | null | undefined): string | null {
+  const token = (text ?? "").trim();
+  return CARD_TOKEN_RE.test(token) ? token : null;
 }
 
 export type MembershipStatus =
@@ -85,7 +79,6 @@ export interface BalanceOk {
 
 export interface CardNotFound {
   result: "card_not_found";
-  card_no: string;
 }
 
 export interface CardUnassigned {
@@ -137,12 +130,12 @@ function isResult(value: unknown): value is { result: string } {
   );
 }
 
-/** GET {API}?org={slug}&card_no=0004 */
-export async function fetchBalance(cardNo: number): Promise<BalanceResponse> {
+/** GET {API}?org={slug}&c=0004_k3x9q2mf */
+export async function fetchBalance(token: string): Promise<BalanceResponse> {
   const { api, org } = requireEnv();
   const url = new URL(api);
   url.searchParams.set("org", org);
-  url.searchParams.set("card_no", formatCardNo(cardNo));
+  url.searchParams.set("c", token);
 
   let res: Response;
   try {
@@ -174,7 +167,7 @@ export const RENEWAL_NOTE_MAX = 500;
 
 /** POST {API}/renew-request */
 export async function requestRenewal(
-  cardNo: number,
+  token: string,
   input: RenewalRequestInput = {}
 ): Promise<RenewalResponse> {
   const { api, org } = requireEnv();
@@ -190,7 +183,7 @@ export async function requestRenewal(
       cache: "no-store",
       body: JSON.stringify({
         org,
-        card_no: formatCardNo(cardNo),
+        c: token,
         ...(phone ? { phone } : {}),
         ...(note ? { note } : {}),
       }),

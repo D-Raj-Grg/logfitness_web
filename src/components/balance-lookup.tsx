@@ -1,15 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Check, Loader2, Search } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
   BalanceApiError,
   fetchBalance,
-  formatCardNo,
   formatEndsOn,
-  parseCardNo,
   requestRenewal,
   RENEWAL_NOTE_MAX,
   RENEWAL_PHONE_MAX,
@@ -21,12 +19,11 @@ import { siteConfig } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 type LookupState =
-  | { kind: "idle" }
-  | { kind: "loading"; cardNo: number }
-  | { kind: "ok"; cardNo: number; data: BalanceOk }
-  | { kind: "card_not_found"; cardNo: number }
-  | { kind: "card_unassigned"; cardNo: number }
-  | { kind: "error"; cardNo: number; message: string; retry: boolean };
+  | { kind: "loading" }
+  | { kind: "ok"; data: BalanceOk }
+  | { kind: "card_not_found" }
+  | { kind: "card_unassigned"; cardNo: string }
+  | { kind: "error"; message: string; retry: boolean };
 
 type RenewalState =
   | { kind: "idle" }
@@ -43,7 +40,6 @@ const RATE_LIMIT_ERROR = "Too many attempts — wait a minute and try again.";
 /** Misconfigured env or unknown org — nothing the member can do about it. */
 const NOT_SET_UP_ERROR =
   "This page isn't set up yet — please ask the front desk.";
-const INPUT_HINT = "Enter the number printed on your card, e.g. 0004.";
 
 /** Maps a thrown error to copy + whether a "try again" makes sense. */
 function describeError(err: unknown): { message: string; retry: boolean } {
@@ -56,170 +52,104 @@ function describeError(err: unknown): { message: string; retry: boolean } {
   return { message: NOT_SET_UP_ERROR, retry: false };
 }
 
-export function BalanceLookup({ initialCardNo }: { initialCardNo?: string }) {
-  // `initialCardNo` is whatever came in on ?card_no= — possibly not a valid
-  // number. Prefill the digits either way so the member sees what was read.
-  const initialNo = initialCardNo ? parseCardNo(initialCardNo) : null;
-  const [text, setText] = useState(() =>
-    initialNo !== null
-      ? formatCardNo(initialNo)
-      : (initialCardNo ?? "").replace(/\D/g, "")
+/**
+ * The page behind the QR on a member's card (`/balance?c=0004_k3x9q2mf`).
+ * The card's random token is the only way in: there is no "type your card
+ * number" box, because the printed number is easy to guess and would let
+ * anyone read other members' balances. No token, or a mangled one, just asks
+ * the member to scan their card again and makes no request.
+ */
+export function BalanceLookup({ token }: { token: string | null }) {
+  if (token === null) return <NoCardLink />;
+  return <TokenLookup key={token} token={token} />;
+}
+
+function NoCardLink() {
+  return (
+    <div className="space-y-10">
+      <Step index="01" title="Your balance">
+        <Panel>
+          <p className="mt-4 text-base leading-relaxed text-foreground">
+            Scan the QR on your card to see your balance.
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            Your days left open from the QR code printed on your membership
+            card. If it doesn&apos;t work, show your card at the front desk
+            and we&apos;ll sort it out.
+          </p>
+          <FrontDeskLinks />
+        </Panel>
+      </Step>
+    </div>
   );
-  // Arriving from the QR (?card_no=…) starts in `loading`, so the first paint
-  // already shows the skeleton and the mount effect only has to fetch.
-  const [state, setState] = useState<LookupState>(() =>
-    initialNo === null ? { kind: "idle" } : { kind: "loading", cardNo: initialNo }
-  );
-  const [inputError, setInputError] = useState<string | null>(() =>
-    initialCardNo && initialNo === null ? INPUT_HINT : null
-  );
+}
+
+function TokenLookup({ token }: { token: string }) {
+  // Arriving from the QR starts in `loading`, so the first paint already shows
+  // the skeleton and the mount effect only has to fetch.
+  const [state, setState] = useState<LookupState>({ kind: "loading" });
   // Guards against a slow earlier lookup overwriting a newer one.
   const requestId = useRef(0);
 
-  function lookup(cardNo: number) {
-    setInputError(null);
-    setState({ kind: "loading", cardNo });
-    void run(cardNo, ++requestId.current);
-  }
-
-  async function run(cardNo: number, id: number) {
+  async function run(id: number) {
     let response: BalanceResponse;
     try {
-      response = await fetchBalance(cardNo);
+      response = await fetchBalance(token);
     } catch (err) {
       if (id !== requestId.current) return;
-      setState({ kind: "error", cardNo, ...describeError(err) });
+      setState({ kind: "error", ...describeError(err) });
       return;
     }
     if (id !== requestId.current) return;
 
     switch (response.result) {
       case "ok":
-        setState({ kind: "ok", cardNo, data: response });
+        setState({ kind: "ok", data: response });
         break;
       case "card_not_found":
-        setState({ kind: "card_not_found", cardNo });
+        setState({ kind: "card_not_found" });
         break;
       case "card_unassigned":
-        setState({ kind: "card_unassigned", cardNo });
+        setState({ kind: "card_unassigned", cardNo: response.card_no });
         break;
       case "org_not_found":
-        setState({
-          kind: "error",
-          cardNo,
-          message: NOT_SET_UP_ERROR,
-          retry: false,
-        });
+        setState({ kind: "error", message: NOT_SET_UP_ERROR, retry: false });
         break;
       default:
         // An unknown result must never leave the skeleton spinning.
-        setState({
-          kind: "error",
-          cardNo,
-          message: GENERIC_ERROR,
-          retry: true,
-        });
+        setState({ kind: "error", message: GENERIC_ERROR, retry: true });
     }
   }
 
-  // Scanning the QR lands here with ?card_no=… — look it up straight away.
-  const autoLooked = useRef(false);
+  function retry() {
+    setState({ kind: "loading" });
+    void run(++requestId.current);
+  }
+
+  // Scanning the QR lands here with ?c=… — look it up straight away.
+  const started = useRef(false);
   useEffect(() => {
-    if (autoLooked.current || initialNo === null) return;
-    autoLooked.current = true;
-    void run(initialNo, ++requestId.current);
+    if (started.current) return;
+    started.current = true;
+    void run(++requestId.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- run once, on mount
   }, []);
 
-  function submit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const n = parseCardNo(text);
-    if (n === null) {
-      setInputError(INPUT_HINT);
-      return;
-    }
-    setText(formatCardNo(n));
-    lookup(n);
-  }
-
-  const busy = state.kind === "loading";
-
   return (
     <div className="space-y-10">
-      {/* 01. Card number */}
-      <Step index="01" title="Your card number">
-        <form onSubmit={submit} className="space-y-3" noValidate>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <label className="sr-only" htmlFor="card-no">
-              Card number
-            </label>
-            <div className="flex flex-1 items-center rounded-xl border border-border/60 bg-card/60 px-4 focus-within:border-foreground/40">
-              <span className="font-mono text-xs tracking-label text-muted-foreground">
-                No.
-              </span>
-              <input
-                id="card-no"
-                name="card_no"
-                type="text"
-                inputMode="numeric"
-                autoComplete="off"
-                pattern="[0-9]*"
-                maxLength={6}
-                value={text}
-                onChange={(e) => {
-                  setText(e.target.value.replace(/\D/g, ""));
-                  setInputError(null);
-                }}
-                placeholder="0004"
-                aria-invalid={inputError ? true : undefined}
-                aria-describedby={inputError ? "card-no-error" : undefined}
-                className="h-12 w-full bg-transparent px-3 font-mono text-lg text-foreground outline-none placeholder:text-muted-foreground/60"
-              />
-            </div>
-            <Button type="submit" size="lg" disabled={busy}>
-              {busy ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" aria-hidden="true" />{" "}
-                  Checking
-                </>
-              ) : (
-                <>
-                  <Search className="size-4" aria-hidden="true" /> Check
-                  balance
-                </>
-              )}
-            </Button>
-          </div>
-          {inputError ? (
-            <p
-              id="card-no-error"
-              role="alert"
-              className="text-sm text-foreground"
-            >
-              {inputError}
-            </p>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              It&apos;s the four-digit number printed under the QR on your
-              card. Leading zeros don&apos;t matter.
-            </p>
-          )}
-        </form>
-      </Step>
-
-      {/* 02. Balance */}
-      <Step index="02" title="Your balance" muted={state.kind === "idle"}>
+      {/* 01. Balance */}
+      <Step index="01" title="Your balance">
         {/* The live region is this persistent wrapper, so the result that
             replaces the skeleton is announced. */}
         <div aria-live="polite">
-          <Result state={state} onRetry={lookup} />
+          <Result state={state} onRetry={retry} />
         </div>
       </Step>
 
-      {/* 03. Renewal */}
+      {/* 02. Renewal */}
       {state.kind === "ok" && (
-        <Step index="03" title="Renew">
-          <Renewal key={state.cardNo} cardNo={state.cardNo} data={state.data} />
+        <Step index="02" title="Renew">
+          <Renewal key={token} token={token} data={state.data} />
         </Step>
       )}
     </div>
@@ -231,18 +161,12 @@ function Result({
   onRetry,
 }: {
   state: LookupState;
-  onRetry: (cardNo: number) => void;
+  onRetry: () => void;
 }) {
   switch (state.kind) {
-    case "idle":
-      return (
-        <p className="text-sm text-muted-foreground">
-          Your days left will appear here.
-        </p>
-      );
     case "loading":
       return (
-        <Panel cardNo={state.cardNo}>
+        <Panel>
           <div className="mt-4 space-y-3" aria-busy="true">
             <div className="h-7 w-48 animate-pulse rounded bg-secondary" />
             <div className="h-4 w-32 animate-pulse rounded bg-secondary" />
@@ -251,17 +175,16 @@ function Result({
         </Panel>
       );
     case "ok":
-      return <BalanceCard cardNo={state.cardNo} data={state.data} />;
+      return <BalanceCard data={state.data} />;
     case "card_not_found":
       return (
-        <Panel cardNo={state.cardNo}>
+        <Panel>
           <p className="mt-4 text-base leading-relaxed text-foreground">
-            We don&apos;t recognise this card number.
+            We don&apos;t recognise this card link.
           </p>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Check the number printed under the QR and try again. If it still
-            doesn&apos;t work, show your card at the front desk and we&apos;ll
-            sort it out.
+            Scan the QR on your card again. If it still doesn&apos;t work,
+            show your card at the front desk and we&apos;ll sort it out.
           </p>
           <FrontDeskLinks />
         </Panel>
@@ -282,7 +205,7 @@ function Result({
       );
     case "error":
       return (
-        <Panel cardNo={state.cardNo}>
+        <Panel>
           <p className="mt-4 text-base leading-relaxed text-foreground">
             {state.message}
           </p>
@@ -291,7 +214,7 @@ function Result({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => onRetry(state.cardNo)}
+                onClick={onRetry}
               >
                 Try again
               </Button>
@@ -304,10 +227,10 @@ function Result({
   }
 }
 
-function BalanceCard({ cardNo, data }: { cardNo: number; data: BalanceOk }) {
+function BalanceCard({ data }: { data: BalanceOk }) {
   const headline = describeDays(data);
   return (
-    <Panel cardNo={cardNo}>
+    <Panel cardNo={data.card_no}>
       <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-lg text-foreground">{data.name_masked}</p>
@@ -411,7 +334,7 @@ function StatusChip({ status }: { status: MembershipStatus }) {
   );
 }
 
-function Renewal({ cardNo, data }: { cardNo: number; data: BalanceOk }) {
+function Renewal({ token, data }: { token: string; data: BalanceOk }) {
   const [phone, setPhone] = useState("");
   const [note, setNote] = useState("");
   const [state, setState] = useState<RenewalState>({ kind: "idle" });
@@ -442,7 +365,7 @@ function Renewal({ cardNo, data }: { cardNo: number; data: BalanceOk }) {
     if (sending) return;
     setState({ kind: "sending" });
     try {
-      const res = await requestRenewal(cardNo, { phone, note });
+      const res = await requestRenewal(token, { phone, note });
       switch (res.result) {
         case "ok":
           setState({ kind: "sent" });
@@ -571,14 +494,17 @@ function Panel({
   cardNo,
   children,
 }: {
-  cardNo: number;
+  /** The printed number, shown only when the API has said which card it is. */
+  cardNo?: string;
   children: React.ReactNode;
 }) {
   return (
     <div className="rounded-xl border border-border/60 bg-card/60 p-5 sm:p-6">
-      <p className="font-mono text-xs tracking-label text-muted-foreground">
-        No. {formatCardNo(cardNo)}
-      </p>
+      {cardNo ? (
+        <p className="font-mono text-xs tracking-label text-muted-foreground">
+          No. {cardNo}
+        </p>
+      ) : null}
       {children}
     </div>
   );

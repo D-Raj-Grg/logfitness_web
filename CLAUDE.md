@@ -44,7 +44,7 @@ src/app/
   layout.tsx                  # fonts (Inter / Anton / JetBrains Mono), metadata, <html class="dark">
   page.tsx                    # composes the landing sections + JSON-LD
   review/page.tsx             # /review — QR-code target for members; noindex, in sitemap
-  balance/page.tsx            # /balance?card_no=0004 — gym-card QR target; noindex, in sitemap
+  balance/page.tsx            # /balance?c=0004_k3x9q2mf — gym-card QR target (random card token); noindex, in sitemap
   globals.css                 # brand tokens + shadcn vars + Magic UI keyframes (Tailwind v4)
   icon.svg                    # favicon — the LOG monogram
   robots.ts / sitemap.ts / manifest.ts   # SEO endpoints (Next file conventions)
@@ -58,7 +58,7 @@ src/components/
   section-heading.tsx         # shared eyebrow + title + description
   site-header.tsx / site-footer.tsx
   review-composer.tsx         # client component behind /review (star rating + chips -> draft)
-  balance-lookup.tsx          # client component behind /balance (card no -> days left + renew request)
+  balance-lookup.tsx          # client component behind /balance (card token -> days left + renew request)
   sections/                   # hero, ticker, programs, shop, membership,
                               #   pricing (rate card), reviews, social, contact, cta
   ui/                         # shadcn primitives (button, card, badge)
@@ -130,13 +130,18 @@ Brand tokens live in `:root` in `globals.css` and are exposed to Tailwind via
   duplicate filter removes. Keep new phrases as multiple variants, not one
   fixed sentence.
 - **/balance** (`src/lib/balance.ts` + `balance-lookup.tsx`): members scan the
-  QR on their gym card → `/balance?card_no=0004`. The page shows days left on
+  QR on their gym card → `/balance?c=0004_k3x9q2mf`. `c` is the card's random
+  token (card number + `_` + 8 random chars), **not** the printed number: the
+  number is easy to guess, so there is deliberately no "type your card number"
+  box and a missing/mangled/old `?card_no=` link just asks the member to scan
+  their card again (no API call). The page shows days left on
   the membership and lets them *request* a renewal (no payment). It talks to
   a Supabase edge function over plain `fetch` — **the only network call on the
   site** — configured by `NEXT_PUBLIC_BALANCE_API` (function base URL) and
   `NEXT_PUBLIC_ORG_SLUG` (see `.env.example`). Do not add a Supabase client
   dependency for this. Phone-number lookup is deliberately absent (OTP later).
-  The API only returns a masked name, so the page is safe to leave public.
+  The API only returns a masked name and only for a valid token, so the page is
+  safe to leave public.
 - **Social section** uses static profile screenshots in `public/images/social/`
   (not live embeds, which get rate-limited). Re-shoot them when follower counts
   go stale.
