@@ -12,7 +12,7 @@ export function CTA() {
     <section className="relative overflow-hidden">
       <DotPattern
         className={cn(
-          "fill-white/[0.05]",
+          "fill-foreground/[0.07]",
           "[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]"
         )}
       />

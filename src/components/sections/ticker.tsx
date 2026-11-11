@@ -5,7 +5,7 @@ const words = ["Strength", "Cardio", "Zumba", "Dance", "Supplements"];
 
 export function Ticker() {
   return (
-    <section className="overflow-hidden border-b border-border/60 bg-tar-road-elevated/40 py-5">
+    <section className="overflow-hidden border-b border-border/60 bg-band py-5">
       {/* The scrolling copy repeats — read once for screen readers, hide the loop. */}
       <p className="sr-only">{words.join(", ")} — all under one roof at LOG.</p>
       <div aria-hidden="true">

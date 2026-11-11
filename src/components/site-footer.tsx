@@ -21,7 +21,7 @@ const brandKit = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border/60 bg-tar-road">
+    <footer className="border-t border-border/60 dark bg-tar-road">
       <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8">
         <div className="flex flex-col gap-12 md:flex-row md:items-start md:justify-between">
           <div className="max-w-sm space-y-5">

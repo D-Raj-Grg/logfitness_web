@@ -24,7 +24,7 @@ export function Contact() {
               href={siteConfig.address.mapsHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative flex h-full min-h-[260px] flex-col justify-between overflow-hidden rounded-xl border border-border/60 bg-tar-road p-8 transition-colors hover:border-border"
+              className="group relative flex h-full min-h-[260px] flex-col justify-between overflow-hidden rounded-xl border border-border/60 dark bg-tar-road p-8 transition-colors hover:border-border"
             >
               <DotPattern
                 className={cn(

@@ -3,6 +3,7 @@ import { ArrowLeft } from "lucide-react";
 
 import { SiteFooter } from "@/components/site-footer";
 import { LogMark } from "@/components/log-mark";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { DotPattern } from "@/components/magicui/dot-pattern";
 import { cn } from "@/lib/utils";
 
@@ -29,18 +30,21 @@ export function LegalPage({
           <Link href="/" aria-label="LOG home">
             <LogMark className="h-6 w-auto" />
           </Link>
-          <Link
-            href="/"
-            className="flex items-center gap-2 text-xs tracking-label text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <ArrowLeft className="size-3.5" />
-            Back to site
-          </Link>
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <Link
+              href="/"
+              className="flex items-center gap-2 text-xs tracking-label text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <ArrowLeft className="size-3.5" />
+              Back to site
+            </Link>
+          </div>
         </div>
       </header>
 
       <main id="main" className="flex-1">
-        <section className="relative overflow-hidden border-b border-border/60 bg-tar-road">
+        <section className="relative overflow-hidden border-b border-border/60 dark bg-tar-road">
           <DotPattern
             className={cn(
               "fill-white/[0.05]",
